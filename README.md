@@ -1,6 +1,6 @@
-# S7 - Seamlessly Supporting Search String Structuring for Secondary Studies
+# Gantt Proposal
 
-S7 is a straightforward web-based application in which the process of creating search strings can be improved, and better visualized, via a series of integrated APIs.
+TODO: This.
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installing
 
 1. Download this repository to your computer.
-2. After node is installed, go to the downloaded S7 folder and then do the following:
+2. After node is installed, go to the downloaded GP folder and then do the following:
     1. Open the command line interface of your choice, inside the folder.
     2. Type the following command: npm install<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;-This will install all the dependencies of the project.
@@ -45,8 +45,11 @@ TODO: Link for each used tool, also the APIs.
 
 ## Authors
 
-* **Gabriel Valença** - *Main work* - (https://gitlab.com/Valencagabriel)
-* **Marcelo Schots** - *Project advisor* - (https://gitlab.com/marceloschots)
+* **Eduardo** - TODO: This.
+* **Gabriel Valença** - *Main code work* - (https://gitlab.com/Valencagabriel)
+* **Rafael** - TODO: This.
+* **Vinicius**  - TODO: This.
+
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
