@@ -1,0 +1,9 @@
+div.box.gantt{
+    width: fit-content;
+    height: fit-content;
+}
+
+span.tag.overlay{
+    z-index: 2;
+    position: absolute;
+}

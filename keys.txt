@@ -1,0 +1,8 @@
+scopus: 4da92307c98ad20ec22605e8a7216af8
+
+
+KEY(test AND NOT banana OR dog)
+http://api.elsevier.com/content/search/scopus?query=TITLE-ABS-KEY%28test+AND+NOT+banana+OR+dog%29&apiKey=4da92307c98ad20ec22605e8a7216af8
+
+1 result testing purposes
+https://api.elsevier.com/content/search/scopus?query=TITLE-ABS-KEY(absurd+word+combination)&apiKey=4da92307c98ad20ec22605e8a7216af8
