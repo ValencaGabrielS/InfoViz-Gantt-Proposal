@@ -37,16 +37,16 @@ function changeTimeDomain(timeDomainString) {
     switch (timeDomainString) {
     case "1hr":
     format = "%H:%M:%S";
-    gantt.timeDomain([ d3.time.hour.offset(getEndDate(), -1), getEndDate() ]);
+    gantt.timeDomain([ d3.timeHour.offset(getEndDate(), -1), getEndDate() ]);
     break;
     case "3hr":
     format = "%H:%M";
-    gantt.timeDomain([ d3.time.hour.offset(getEndDate(), -3), getEndDate() ]);
+    gantt.timeDomain([ d3.timeHour.offset(getEndDate(), -3), getEndDate() ]);
     break;
 
     case "6hr":
     format = "%H:%M";
-    gantt.timeDomain([ d3.time.hour.offset(getEndDate(), -6), getEndDate() ]);
+    gantt.timeDomain([ d3.timeHour.offset(getEndDate(), -6), getEndDate() ]);
     break;
 
     case "1day":
@@ -83,8 +83,8 @@ function addTask() {
     var taskName = taskNames[Math.floor(Math.random() * taskNames.length)];
 
     tasks.push({
-    "startDate" : d3.time.hour.offset(lastEndDate, Math.ceil(1 * Math.random())),
-    "endDate" : d3.time.hour.offset(lastEndDate, (Math.ceil(Math.random() * 3)) + 1),
+    "startDate" : d3.timeHour.offset(lastEndDate, Math.ceil(1 * Math.random())),
+    "endDate" : d3.timeHour.offset(lastEndDate, (Math.ceil(Math.random() * 3)) + 1),
     "taskName" : taskName,
     "status" : taskStatusName
     });
