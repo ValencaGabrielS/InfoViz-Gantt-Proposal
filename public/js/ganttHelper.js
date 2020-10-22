@@ -1,5 +1,5 @@
 var tasks = [
-    {"startDate":new Date("Sun Dec 09 01:36:45 EST 2012"),"endDate":new Date("Sun Dec 09 02:36:45 EST 2012"),"taskName":"E Job","status":"RUNNING"}];
+    {"startDate":new Date("Sun Dec 09 01:36:45 EST 2012"),"endDate":new Date("Sun Dec 09 05:36:45 EST 2012"),"taskName":"Sprint 1","status":"RUNNING"}];
 
 var taskStatus = {
     "SUCCEEDED" : "bar",
@@ -8,7 +8,7 @@ var taskStatus = {
     "KILLED" : "bar-killed"
 };
 
-var taskNames = [ "D Job", "P Job", "E Job", "A Job", "N Job" ];
+var taskNames = [ "Sprint 1", "Sprint 2", "Sprint 3", "Sprint 4", "Sprint 5" ];
 
 tasks.sort(function(a, b) {
     return a.endDate - b.endDate;
@@ -84,7 +84,7 @@ function addTask() {
 
     tasks.push({
     "startDate" : d3.timeHour.offset(lastEndDate, Math.ceil(1 * Math.random())),
-    "endDate" : d3.timeHour.offset(lastEndDate, (Math.ceil(Math.random() * 3)) + 1),
+    "endDate" : d3.timeHour.offset(lastEndDate, (Math.ceil(Math.random() * 3)) + 5),
     "taskName" : taskName,
     "status" : taskStatusName
     });

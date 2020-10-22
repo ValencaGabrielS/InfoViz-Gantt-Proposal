@@ -116,9 +116,14 @@ d3.gantt = function() {
             .duration(200)
             .style('opacity', 0.9);
           div
-            .html('start date:' + d.startDate + '<br/>end date:' + d.endDate)
-            .style('left', d3.event.pageX + 'px')
-            .style('top', d3.event.pageY + 'px');
+            // .html('start date:' + d.startDate + '<br/>end date:' + d.endDate)
+            // .style('left', d3.event.pageX + 'px')
+            // .style('top', d3.event.pageY + 'px');
+            .html("<div></div>")
+            .style("height", 60 + 'px')
+            .style("width", 400 + 'px')
+            .style("background-color", 'blue')
+            .style('opacity', 0.9);
         })
         .on('mouseout', () => {
           div

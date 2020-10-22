@@ -34,3 +34,7 @@ html,body,#wrapper {
 .bar-killed {
 	fill: #ffbb33;
 }
+
+rect {
+	height: 60px;
+}
