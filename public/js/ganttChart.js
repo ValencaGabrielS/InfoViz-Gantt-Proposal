@@ -37,7 +37,7 @@ d3.gantt = function() {
     var rectTransform = function(d) {
       return "translate(" + x(d.startDate) + "," + y(d.taskName) + ")";
     };
-  
+
     var x = d3.scaleTime().domain([timeDomainStart, timeDomainEnd]).range([0, width]).clamp(true);
     var y = d3.scaleBand().domain(taskTypes).rangeRound([0, height - margin.top - margin.bottom], .1).align(align).paddingInner(padding).paddingOuter(padding);
   
@@ -72,6 +72,11 @@ d3.gantt = function() {
   
     function gantt(tasks) {
   
+      var color1 = "blue";
+      var color2 = "yellow";
+      var color3 = "green";
+      var color4 = "red";
+
       initTimeDomain(tasks);
       initAxis();
   
@@ -120,9 +125,10 @@ d3.gantt = function() {
             // .style('left', d3.event.pageX + 'px')
             // .style('top', d3.event.pageY + 'px');
             .html("<div></div>")
+            .style('background-image', `linear-gradient(to left, ${color1}, ${color2}, ${color3}, ${color4})`)
             .style("height", 60 + 'px')
             .style("width", 400 + 'px')
-            .style("background-color", 'blue')
+            // .style("background-color", 'blue')
             .style('opacity', 0.9);
         })
         .on('mouseout', () => {
