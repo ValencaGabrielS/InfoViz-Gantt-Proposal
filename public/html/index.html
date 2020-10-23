@@ -11,12 +11,15 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="bulmaStyles.css">
     <link rel="stylesheet" href="ganttStyle.css">
+    <link rel="stylesheet" type="text/css" href="jquery.datetimepicker.css"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script> 
 
+    <script src="jquery.datetimepicker.js"></script>
     <script type="text/javascript" src="ganttChart.js"></script>
-	<script type="text/javascript" src="ganttHelper.js"></script>
+    <script type="text/javascript" src="ganttHelper.js"></script>
+    
 
 
 </head>
@@ -53,34 +56,57 @@
         </div>
 
         <div class="column is-3 is-offset-1">
-            <div class="box form">
-                <div class="field is-grouped is-grouped-centered">
-                    <form>
-                        <div class="field">
-                            <label class="label">Nome da Tarefa</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Text input">
-                            </div>
+            <div class="box ">
+                <div class="field is-horizontal"></div>
+                <form id="ganttForm">
+                    <div class="field">
+                        <label class="label">Nome da Tarefa</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Text input">
                         </div>
+                    </div>
 
-                        <div class="field">
-                            <label class="label">Data de Inicio</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Text input">
-                            </div>
+                    <div class="field">
+                        <label class="label">Data de Inicio</label>
+                        <div class="control">
+                            <input type="date" id="start" name="trip-start">
                         </div>
+                    </div>
 
-                        <div class="field">
-                            <label class="label">Data de Fim</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Text input">
-                            </div>
+                    <div class="field">
+                        <label class="label">Data de Fim</label>
+                        <div class="control">
+                            <input type="date" id="finish" name="trip-start">
                         </div>
-                        
-                    </form>
-                    <button class="button" onclick="addTask()">Add Task</button>
-                    <button class="button" onclick="removeTask()">Remove Task</button>
-                </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Tempo estimado</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Text input">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Descrição</label>
+                        <div class="control">
+                            <input class="textarea" placeholder="Explain the task">
+                        </div>
+                    </div>
+
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-link">Add task</button>
+                        </div>
+                        <div class="control">
+                            <button class="button is-link is-light">Cancel</button>
+                        </div>
+                    </div>
+
+                </form>       
+                    
+                <button class="button is-small" onclick="removeTask()">Remove Task</button>    
             </div>
         </div>
     </div>
@@ -99,7 +125,17 @@
     </footer>
 
     <script>
+
+        var taskGroups = [ "Team 1", "Team 2", "Team 3", "Team 4", "Team 5" ];
+
         gantt(tasks)  
+
+        $('#ganttForm').submit(function(e) {
+            e.preventDefault();
+            console.log(e)
+            addTask(e)
+        });
+
     </script>
 </body>
 
