@@ -1,4 +1,6 @@
 
+var taskGroups = [ "Team 1", "Team 2", "Team 3", "Team 4", "Team 5" ];
+
 var tasks = [
     {
     "taskGroup":taskGroups[0],
