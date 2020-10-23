@@ -36,15 +36,12 @@
     <!-- Main container -->    
     <br>
 
-    <div class="field is-grouped is-grouped-centered">
-        <button class="button" onclick="addTask()">Add Task</button>
-        <button class="button" onclick="removeTask()">Remove Task</button>
-    </div>
+    
 
     <div class="columns is-vcentered">
 
 
-        <div class="column is-3 is-offset-1">
+        <div class="column is-5 is-offset-1">
             <div class="box gantt">  
                 <span class="tag is-primary is-light verticalLabel overlay">Gantt Chart</span>
                 <div class="field is-grouped is-grouped-right">                    
@@ -55,6 +52,37 @@
             </div>
         </div>
 
+        <div class="column is-3 is-offset-1">
+            <div class="box form">
+                <div class="field is-grouped is-grouped-centered">
+                    <form>
+                        <div class="field">
+                            <label class="label">Nome da Tarefa</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Text input">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Data de Inicio</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Text input">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Data de Fim</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Text input">
+                            </div>
+                        </div>
+                        
+                    </form>
+                    <button class="button" onclick="addTask()">Add Task</button>
+                    <button class="button" onclick="removeTask()">Remove Task</button>
+                </div>
+            </div>
+        </div>
     </div>
     
 
