@@ -12,3 +12,10 @@ span.tag.overlay{
     height: 638px;
 
 }
+
+.horizontalLabel {
+    top: -5%;
+    position: relative;
+    z-index: 1;
+}
+  
