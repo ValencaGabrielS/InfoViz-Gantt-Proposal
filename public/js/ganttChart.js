@@ -2,8 +2,9 @@
  * @author Dimitry Kudrayvtsev
  * @version 2.1
  */
-const HEIGHT = 1000
-const WIDTH = 1000
+
+const GANTT_HEIGHT = window.innerWidth/2
+const GANTT_WIDTH = window.innerHeight/2
 
 d3.gantt = function() {
     var FIT_TIME_DOMAIN_MODE = "fit";
@@ -22,8 +23,8 @@ d3.gantt = function() {
     var timeDomainMode = FIT_TIME_DOMAIN_MODE; // fixed or fit
     var taskTypes = [];
     var taskStatus = [];
-    var height = HEIGHT - margin.top - margin.bottom - 5;
-    var width = WIDTH - margin.right - margin.left - 5;
+    var height = GANTT_HEIGHT - margin.top - margin.bottom - 5;
+    var width = GANTT_WIDTH - margin.right - margin.left - 5;
     var align = 0.5;
     var padding = 0.9;
 

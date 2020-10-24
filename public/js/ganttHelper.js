@@ -7,7 +7,8 @@ var tasks = [
     "startDate": new Date(),
     "endDate":addMinutes(new Date(),120),
     "id":1,
-    "status":"bar-running"
+    "status":"bar-running",
+    "subTasks":[]
     }
 ];
 
@@ -87,28 +88,28 @@ function getEndDate() {
     return lastEndDate;
 }
 
-function addTask(name,description,start,finish,time) {
+function addTask(data) {
 
-    var taskName = name
-    var taskDescription = description
-    var startDate = start
-    var endDate = finish
-    var taskTime = time
-
+    var taskName = data.taskName
+    var taskDescription = data.taskDescription
+    var startDate = new Date(data.taskStart);
+    var endDate = new Date(data.taskFinish);
+    var taskTime = data.taskEstimative
+    var taskGroup = data.taskGroup
+    
     var lastEndDate = getEndDate();
-    var taskStatusName = taskStatus.RUNNING;
-
-    var taskGroup = taskGroups[Math.floor(Math.random() * taskGroups.length)];
 
     tasks.push({
         "taskName" : taskName,
-        "startDate" : d3.timeHour.offset(lastEndDate, Math.ceil(1 * Math.random())),
-        "endDate" : d3.timeHour.offset(lastEndDate, (Math.ceil(Math.random() * 3)) + 5),
+        "id":currentId++,
+        "startDate" : startDate,//d3.timeHour.offset(lastEndDate, Math.ceil(1 * Math.random())),
+        "endDate" : endDate,//d3.timeHour.offset(lastEndDate, (Math.ceil(Math.random() * 3)) + 5),
         "taskGroup" : taskGroup,
-        "status" : taskStatusName
+        "status" : taskStatus.RUNNING,
+        "subTasks":[]
     });
 
-    changeTimeDomain(timeDomainString);
+    changeTimeDomain(timeDomainString)
     gantt.redraw(tasks);
 };
 
