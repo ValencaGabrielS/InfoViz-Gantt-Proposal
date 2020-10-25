@@ -115,6 +115,11 @@ d3.gantt = function() {
                 return Math.max(1, (x(d.endDate) - x(d.startDate)));
             })
             .style('cursor', 'pointer')
+            .on('click', d => {
+                CURRENT_TASKS = d.subTasks
+                changeTimeDomain(timeDomainString);
+                gantt.redraw(d.subTasks);
+            })
             .on('mouseover', d => {
                 div
                     .transition()
@@ -202,6 +207,12 @@ d3.gantt = function() {
             })
             .attr("width", function(d) {
                 return Math.max(1, (x(d.endDate) - x(d.startDate)));
+            })
+            .style('cursor', 'pointer')
+            .on('click', d => {
+                CURRENT_TASKS = d.subTasks
+                changeTimeDomain(timeDomainString);
+                gantt.redraw(d.subTasks);
             });
 
         rect.transition()

@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="bulmaStyles.css">
     <link rel="stylesheet" href="ganttStyle.css">
-    <link rel="stylesheet" type="text/css" href="jquery.datetimepicker.css"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script> 
-
-    <script src="jquery.datetimepicker.js"></script>
+    
     <script type="text/javascript" src="ganttChart.js"></script>
     <script type="text/javascript" src="ganttHelper.js"></script>
+    
+
     
 
 
@@ -167,7 +167,7 @@
 
        
 
-        gantt(tasks)  
+        gantt(CURRENT_TASKS)  
 
         $('#ganttForm').submit(function(e) {
             e.preventDefault();

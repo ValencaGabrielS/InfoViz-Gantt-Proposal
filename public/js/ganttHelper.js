@@ -1,18 +1,36 @@
 
 var taskGroups = [ "Team 1", "Team 2", "Team 3", "Team 4", "Team 5" ];
 
-var tasks = [
+var MAIN_TASKS = [
     {
     "taskGroup":taskGroups[0],
     "startDate": new Date(),
     "endDate":addMinutes(new Date(),120),
     "id":1,
     "status":"bar-running",
-    "subTasks":[]
+    "subTasks":[
+        {
+        "taskGroup":taskGroups[1],
+        "startDate": new Date(),
+        "endDate":addMinutes(new Date(),240),
+        "id":1,
+        "status":"bar-running",
+        "subTasks":[]
+        },
+        {
+            "taskGroup":taskGroups[2],
+            "startDate": new Date(),
+            "endDate":addMinutes(new Date(),60),
+            "id":1,
+            "status":"bar-running",
+            "subTasks":[]
+        }
+    ]
     }
-];
+]
+var CURRENT_TASKS = MAIN_TASKS;
 
-var currentId = tasks.length;
+var currentId = CURRENT_TASKS.length;
 
 var taskStatus = {
     "SUCCEEDED" : "bar",
@@ -22,16 +40,16 @@ var taskStatus = {
 };
 
 
-tasks.sort(function(a, b) {
+CURRENT_TASKS.sort(function(a, b) {
     return a.endDate - b.endDate;
 });
 
-var maxDate = tasks[tasks.length - 1].endDate;
-tasks.sort(function(a, b) {
+var maxDate = CURRENT_TASKS[CURRENT_TASKS.length - 1].endDate;
+CURRENT_TASKS.sort(function(a, b) {
     return a.startDate - b.startDate;
 });
 
-var minDate = tasks[0].startDate;
+var minDate = CURRENT_TASKS[0].startDate;
 
 var format = "%H:%M";
 var timeDomainString = "1day";
@@ -42,7 +60,7 @@ var gantt = d3.gantt().taskTypes(taskGroups).taskStatus(taskStatus).tickFormat(f
 gantt.timeDomainMode("fixed");
 changeTimeDomain(timeDomainString);
 
-gantt(tasks);
+gantt(CURRENT_TASKS);
 
 function changeTimeDomain(timeDomainString) {
     this.timeDomainString = timeDomainString;
@@ -75,14 +93,14 @@ function changeTimeDomain(timeDomainString) {
     }
 
     gantt.tickFormat(format);
-    gantt.redraw(tasks);
+    gantt.redraw(CURRENT_TASKS);
 }
 
 function getEndDate() {
     var lastEndDate = Date.now();
    
-    if (tasks.length > 0) {
-        lastEndDate = tasks[tasks.length - 1].endDate;
+    if (CURRENT_TASKS.length > 0) {
+        lastEndDate = CURRENT_TASKS[CURRENT_TASKS.length - 1].endDate;
     }
 
     return lastEndDate;
@@ -99,7 +117,7 @@ function addTask(data) {
     
     var lastEndDate = getEndDate();
 
-    tasks.push({
+    CURRENT_TASKS.push({
         "taskName" : taskName,
         "id":currentId++,
         "startDate" : startDate,//d3.timeHour.offset(lastEndDate, Math.ceil(1 * Math.random())),
@@ -110,13 +128,13 @@ function addTask(data) {
     });
 
     changeTimeDomain(timeDomainString)
-    gantt.redraw(tasks);
+    gantt.redraw(CURRENT_TASKS);
 };
 
 function removeTask() {
-    tasks.pop();
+    CURRENT_TASKS.pop();
     changeTimeDomain(timeDomainString);
-    gantt.redraw(tasks);
+    gantt.redraw(CURRENT_TASKS);
 };
 
 function addMinutes(date, minutes) {
