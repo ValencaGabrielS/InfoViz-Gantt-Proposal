@@ -140,3 +140,8 @@ function removeTask() {
 function addMinutes(date, minutes) {
     return date.setMinutes( date.getMinutes() + minutes );
 }
+
+function resetGantt(){
+    CURRENT_TASKS = MAIN_TASKS
+    gantt.redraw(CURRENT_TASKS);
+}

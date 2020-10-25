@@ -45,8 +45,9 @@
 
 
         <div class="column is-5 is-offset-1">
+            <span class="tag is-primary is-light horizontalLabel">Sprints</span>
             <div class="box gantt">  
-                <span class="tag is-primary is-light horizontalLabel">Sprints</span>
+                <a id="r" style="width:50px; position: absolute; z-index: 100" onclick="resetGantt()"><img src='/return.svg' alt="Go back"></a>
                 <div class="field is-grouped is-grouped-right">                    
                     <button class="button is-small" onclick="changeTimeDomain('1day')">DAY</button>
                     <button class="button is-small" onclick="changeTimeDomain('1week')">WEEK</button>
@@ -56,8 +57,8 @@
         </div>
 
         <div class="column is-3 is-offset-1">
+            <span class="tag is-primary is-light horizontalLabel">Task</span>
             <div class="box form">
-                <span class="tag is-primary is-light horizontalLabel">Task</span>
                 <form id="ganttForm">
 
                     <div class="field is-grouped">
