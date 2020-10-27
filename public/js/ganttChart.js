@@ -12,9 +12,9 @@ d3.gantt = function() {
 
     var margin = {
         top: 20,
-        right: 40,
+        right: 60,
         bottom: 20,
-        left: 40
+        left: 60
     };
 
     var selector = '#ganttChart';
@@ -43,6 +43,8 @@ d3.gantt = function() {
 
     var xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat(tickFormat)).tickSize(8).tickPadding(8);
     var yAxis = d3.axisLeft(y).tickSize(0);
+
+    var tooltip;
 
     var initTimeDomain = function(tasks) {
         if (timeDomainMode === FIT_TIME_DOMAIN_MODE) {
@@ -76,46 +78,55 @@ d3.gantt = function() {
             console.log("This is a main task")
             console.log(d)
 
-            CURRENT_TASKS = d.subTasks
             IS_SUBTASK_VIZ = true
             SUBTASK_FOCUS = d.id
+            CURRENT_TASKS = filterById(MAIN_TASKS,SUBTASK_FOCUS).subTasks
 
-            gantt = d3.gantt().taskTypes(subtaskGroups).taskStatus(subtaskStatus).tickFormat(format);
-            changeTimeDomain(timeDomainString);
-
-            cleanRects()
-            gantt.redraw(d.subTasks);
+            gantt = d3.gantt().taskTypes(subtaskGroups).taskStatus(taskStatus).tickFormat(format);
+            changeTimeDomain(timeDomainString,gantt);
+            
+            changeVision()
+            gantt.redraw(CURRENT_TASKS);
         }
         else{
             console.log("This is a subtask")
             console.log(d)
         }
     }
+
+
+    var ganttMouseover = function(d) {
+        
+        tooltip
+            .style("opacity", 1)
+        /*d3.select(this)
+            .style("stroke", "black")
+            .style("opacity", 1)
+        */
+    }
+
+    var ganttMousemove = function(d) {
     
-    function ganttMouseover(div,d){
-        div
-            .transition()
-            .duration(200)
-            .style('opacity', 0.9);
-        div
-            .html(d.taskName + '<br/>- ' + d.taskDescription)
-            .style('left', d3.event.pageX + 'px')
-            .style('top', d3.event.pageY + 'px');
-            //.html("<div></div>")
-            //.style('background-image', `linear-gradient(to left, ${color1}, ${color2}, ${color3}, ${color4})`)
-            //.style("height", 60 + 'px')
-            //.style("width", 400 + 'px')
-            //.style("background-color", 'blue')
-            //.style('opacity', 0.9);
+        tooltip
+            .html(
+                "Task: " + d.taskName + "<br/>" + 
+                "Type: " + d.taskGroup + "<br/>" + 
+                "Starts: " + d.startDate + "<br/>" + 
+                "Ends: " + d.endDate + "<br/>" + 
+                "Details: " + d.taskDescription
+            )/*
+            .style("left", (d3.mouse(this)[0]+70) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px")*/
     }
 
-    function ganttMouseout(div,d){
-        div
-            .transition()
-            .duration(500)
-            .style('opacity', 0);
+    var ganttMouseout = function(d) {
+       
+        tooltip
+            .style("opacity", 0)
+        /*d3.select(this)
+            .style("stroke", "none")
+            .style("opacity", 0.8)*/
     }
-
 
     function gantt(tasks) {
 
@@ -127,11 +138,16 @@ d3.gantt = function() {
         initTimeDomain(tasks);
         initAxis();
 
-        var div = d3
-            .select(selector)
-            .append('div')
-            .attr('class', 'd3tooltip')
-            .style('opacity', 0);
+        tooltip = d3.select(selector)
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
+    
 
         var svg = d3.select(selector)
             .append("svg")
@@ -165,13 +181,9 @@ d3.gantt = function() {
             .on('click', d => {
                 ganttClick(d)
             })
-            .on('mouseover', d => {
-                ganttMouseover(div,d)
- 
-            })
-            .on('mouseout', () => {
-                ganttMouseout(div)
-            });
+            .on('mouseover',ganttMouseover)
+            .on('mousemove', ganttMousemove)
+            .on('mouseout', ganttMouseout);
 
         var gx = svg.append("g")
             .attr("class", "x axis")
@@ -220,16 +232,23 @@ d3.gantt = function() {
 
         var ganttChartGroup = svg.select(".gantt-chart");
         
-        var rect = ganttChartGroup.selectAll("rect").data(tasks, keyFunction);
-
-        var div = d3
-            .select(selector)
-            .append('div')
-            .attr('class', 'd3tooltip')
-            .style('opacity', 0);
+        var rect = svg.selectAll("rect").data(tasks, keyFunction);
 
         rect.enter()
             .append("rect")
+            .on('click', d => {
+                ganttClick(d)
+            })
+            .on('mouseover', d => {
+                ganttMouseover(d,tooltip)
+ 
+            })
+            .on('mousemove', d => {
+                ganttMousemove(d,tooltip)
+            })
+            .on('mouseout', () => {
+                ganttMouseout(tooltip)
+            })
             .attr("class", function(d) {
                 if (taskStatus[d.status] == null) {
                     return "bar";
@@ -246,16 +265,7 @@ d3.gantt = function() {
                 return Math.max(1, (x(d.endDate) - x(d.startDate)));
             })
             .style('cursor', 'pointer')
-            .on('click', d => {
-                ganttClick(d)
-            })
-            .on('mouseover', d => {
-                ganttMouseover(div,d)
- 
-            })
-            .on('mouseout', () => {
-                ganttMouseout(div)
-            });
+            ;
 
 
         rect.transition()

@@ -41,7 +41,6 @@
     <!-- Main container -->    
     <br>
 
-    
 
     <div class="columns is-vcentered">
 
@@ -51,11 +50,12 @@
             <div class="box gantt">  
                 <a id="r" style="width:50px; position: absolute; z-index: 100" onclick="resetGantt()"><img src='/return.svg' alt="Go back"></a>
                 <div class="field is-grouped is-grouped-right">                    
-                    <button class="button is-small" onclick="changeTimeDomain('1day')">DAY</button>
-                    <button class="button is-small" onclick="changeTimeDomain('1week')">WEEK</button>
+                    <button class="button is-small" onclick="changeTimeDomainButton('1day')">DAY</button>
+                    <button class="button is-small" onclick="changeTimeDomainButton('1week')">WEEK</button>
                 </div>
                 <div id="ganttChart"></div>
             </div>
+
         </div>
 
         <div class="column">

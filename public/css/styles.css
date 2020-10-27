@@ -18,3 +18,28 @@ span.tag.overlay{
     z-index: 1;
 }
   
+#tag {
+    color: white;
+    background: #FA283D;
+    width: 150px;
+    position: absolute;
+    display: none;
+    padding:3px 6px;
+    margin-left: -80px;
+    font-size: 11px;
+}
+  
+  
+  
+#tag:before {
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    left: 50%;
+    margin-left: -5px;
+    position: absolute;
+    width: 0;
+    border-width: 10px;
+    border-bottom-color: #FA283D;
+    top: -20px;
+}

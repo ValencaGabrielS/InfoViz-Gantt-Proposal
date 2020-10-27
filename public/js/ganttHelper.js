@@ -2,8 +2,7 @@
 var taskGroups = [ "Team 1", "Team 2", "Team 3", "Team 4", "Team 5" ];
 var subtaskGroups = [ "Subtask 1", "Subtask 2", "Subtask 3", "Subtask 4", "Subtask 5" ];
 
-var MAIN_TASKS = [
-]
+var MAIN_TASKS = []
 
 var IS_SUBTASK_VIZ = false
 var SUBTASK_FOCUS = -1
@@ -33,13 +32,18 @@ var format = "%H:%M";
 var timeDomainString = "1week";
 
 var gantt = d3.gantt().taskTypes(taskGroups).taskStatus(taskStatus).tickFormat(format);
-changeTimeDomain(timeDomainString);
+changeTimeDomain(timeDomainString,gantt);
 gantt.timeDomainMode("fixed");
 
 
 //gantt(CURRENT_TASKS);
 
-function changeTimeDomain(timeDomainString) {
+function changeTimeDomainButton(timeDomainString){
+    changeTimeDomain(timeDomainString,gantt)
+}
+
+function changeTimeDomain(timeDomainString,gantt) {
+
     this.timeDomainString = timeDomainString;
     switch (timeDomainString) {
         case "1hr":
@@ -68,7 +72,7 @@ function changeTimeDomain(timeDomainString) {
         default:
             format = "%H:%M"
     }
-
+    console.log(gantt.taskTypes())
     gantt.tickFormat(format);
     gantt.redraw(CURRENT_TASKS);
 }
@@ -91,6 +95,7 @@ function addTask(data) {
     var endDate = new Date(data.taskFinish);
     var taskTime = data.taskEstimative
     var taskGroup = data.taskGroup
+    currentId++
 
     if(!IS_SUBTASK_VIZ){
         
@@ -99,37 +104,24 @@ function addTask(data) {
         MAIN_TASKS.push({
             "isSubtask":false,
             "taskName" : taskName,
-            "id":currentId++,
+            "id":currentId,
             "startDate" : startDate,
             "endDate" : endDate,
             "taskGroup" : taskGroup,
             "status" : taskStatus.RUNNING,
             "taskDescription": taskDescription,
-            "subTasks":[
-                {
-                "isSubtask":false,
-                "taskName" : "Task example",
-                "id":currentId++,
-                "startDate" : startDate,
-                "endDate" : endDate,
-                "taskGroup" : taskGroup,
-                "status" : taskStatus.RUNNING,
-                "taskDescription": "Task example description",
-                "subTasks":[]
-                }
-            ]
+            "subTasks":[]
         });
 
-        changeTimeDomain(timeDomainString)
+        changeTimeDomain(timeDomainString,gantt)
         gantt.redraw(MAIN_TASKS);
     }
     else{
 
         console.log("adding subtask to sprint" +SUBTASK_FOCUS )        
-        CURRENT_TASKS = filterById(MAIN_TASKS)
-        
-        CURRENT_TASKS.subTasks.push({
-            "isSubtask":false,
+
+        CURRENT_TASKS.push({
+            "isSubtask":true,
             "taskName" : taskName,
             "id":currentId++,
             "startDate" : startDate,
@@ -140,7 +132,7 @@ function addTask(data) {
             "subTasks":[]
         })
 
-        changeTimeDomain(timeDomainString)
+        changeTimeDomain(timeDomainString,gantt)
         gantt.redraw(CURRENT_TASKS);
     }
     
@@ -148,17 +140,39 @@ function addTask(data) {
 
 function removeTask() {
     CURRENT_TASKS.pop();
-    changeTimeDomain(timeDomainString);
+    changeTimeDomain(timeDomainString,gantt);
     gantt.redraw(CURRENT_TASKS);
 };
 
-
 function resetGantt(){
-    cleanRects()
+
+    IS_SUBTASK_VIZ = false
     CURRENT_TASKS = MAIN_TASKS
+    SUBTASK_FOCUS = -1
+
+    changeVision()
     gantt.redraw(CURRENT_TASKS);
 }
 
 function cleanRects(){
     d3.select(".chart").select(".gantt-chart").selectAll("rect").remove()
+}
+
+function changeVision(){
+    cleanRects()
+    $('#taskGroup').empty()
+    if(IS_SUBTASK_VIZ){
+        subtaskGroups.forEach(d => 
+            $('#taskGroup').append(`<option value="${d}"> 
+                ${d} 
+            </option>`));
+            
+    }
+    else{
+        taskGroups.forEach(d => 
+            $('#taskGroup').append(`<option value="${d}"> 
+                ${d} 
+            </option>`));
+            ; 
+    }
 }
