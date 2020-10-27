@@ -31,20 +31,21 @@ CURRENT_TASKS.sort(function(a, b) {
 var format = "%H:%M";
 var timeDomainString = "1week";
 
-var gantt = d3.gantt().taskTypes(taskGroups).taskStatus(taskStatus).tickFormat(format);
-changeTimeDomain(timeDomainString,gantt);
-gantt.timeDomainMode("fixed");
+var maingantt = d3.gantt().taskTypes(taskGroups).taskStatus(taskStatus).tickFormat(format);
+var subgantt = d3.gantt().taskTypes(subtaskGroups).taskStatus(taskStatus).tickFormat(format);
+
+maingantt.timeDomainMode("fixed");
+subgantt.timeDomainMode("fixed");
+
+var gantt = maingantt
+
+changeTimeDomain(timeDomainString);
 
 
-//gantt(CURRENT_TASKS);
-
-function changeTimeDomainButton(timeDomainString){
-    changeTimeDomain(timeDomainString,gantt)
-}
-
-function changeTimeDomain(timeDomainString,gantt) {
-
+function changeTimeDomain(timeDomainString) {
+    
     this.timeDomainString = timeDomainString;
+
     switch (timeDomainString) {
         case "1hr":
             format = "%H:%M:%S";
@@ -72,6 +73,7 @@ function changeTimeDomain(timeDomainString,gantt) {
         default:
             format = "%H:%M"
     }
+
     console.log(gantt.taskTypes())
     gantt.tickFormat(format);
     gantt.redraw(CURRENT_TASKS);
@@ -113,7 +115,7 @@ function addTask(data) {
             "subTasks":[]
         });
 
-        changeTimeDomain(timeDomainString,gantt)
+        changeTimeDomain(timeDomainString)
         gantt.redraw(MAIN_TASKS);
     }
     else{
@@ -132,7 +134,7 @@ function addTask(data) {
             "subTasks":[]
         })
 
-        changeTimeDomain(timeDomainString,gantt)
+        changeTimeDomain(timeDomainString)
         gantt.redraw(CURRENT_TASKS);
     }
     
@@ -140,7 +142,7 @@ function addTask(data) {
 
 function removeTask() {
     CURRENT_TASKS.pop();
-    changeTimeDomain(timeDomainString,gantt);
+    changeTimeDomain(timeDomainString);
     gantt.redraw(CURRENT_TASKS);
 };
 
@@ -162,6 +164,7 @@ function changeVision(){
     cleanRects()
     $('#taskGroup').empty()
     if(IS_SUBTASK_VIZ){
+        gantt = subgantt
         subtaskGroups.forEach(d => 
             $('#taskGroup').append(`<option value="${d}"> 
                 ${d} 
@@ -169,6 +172,7 @@ function changeVision(){
             
     }
     else{
+        gantt = maingantt
         taskGroups.forEach(d => 
             $('#taskGroup').append(`<option value="${d}"> 
                 ${d} 

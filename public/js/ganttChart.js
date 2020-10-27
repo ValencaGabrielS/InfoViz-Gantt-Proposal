@@ -5,6 +5,7 @@
 
 const GANTT_HEIGHT = window.innerHeight/2
 const GANTT_WIDTH = window.innerWidth/2
+var tooltip;
 
 d3.gantt = function() {
     var FIT_TIME_DOMAIN_MODE = "fit";
@@ -44,7 +45,7 @@ d3.gantt = function() {
     var xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat(tickFormat)).tickSize(8).tickPadding(8);
     var yAxis = d3.axisLeft(y).tickSize(0);
 
-    var tooltip;
+
 
     var initTimeDomain = function(tasks) {
         if (timeDomainMode === FIT_TIME_DOMAIN_MODE) {
@@ -81,11 +82,11 @@ d3.gantt = function() {
             IS_SUBTASK_VIZ = true
             SUBTASK_FOCUS = d.id
             CURRENT_TASKS = filterById(MAIN_TASKS,SUBTASK_FOCUS).subTasks
-
-            gantt = d3.gantt().taskTypes(subtaskGroups).taskStatus(taskStatus).tickFormat(format);
-            changeTimeDomain(timeDomainString,gantt);
+            gantt = subgantt
             
             changeVision()
+
+            changeTimeDomain("1week")          
             gantt.redraw(CURRENT_TASKS);
         }
         else{
