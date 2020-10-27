@@ -3,8 +3,8 @@
  * @version 2.1
  */
 
-const GANTT_HEIGHT = window.innerWidth/2
-const GANTT_WIDTH = window.innerHeight/2
+const GANTT_HEIGHT = window.innerHeight/2
+const GANTT_WIDTH = window.innerWidth/2
 
 d3.gantt = function() {
     var FIT_TIME_DOMAIN_MODE = "fit";
@@ -70,6 +70,53 @@ d3.gantt = function() {
         yAxis = d3.axisLeft(y).tickSize(0);
     };
 
+    function ganttClick(d){
+        if(!d.isSubtask){
+
+            console.log("This is a main task")
+            console.log(d)
+
+            CURRENT_TASKS = d.subTasks
+            IS_SUBTASK_VIZ = true
+            SUBTASK_FOCUS = d.id
+
+            gantt = d3.gantt().taskTypes(subtaskGroups).taskStatus(subtaskStatus).tickFormat(format);
+            changeTimeDomain(timeDomainString);
+
+            cleanRects()
+            gantt.redraw(d.subTasks);
+        }
+        else{
+            console.log("This is a subtask")
+            console.log(d)
+        }
+    }
+    
+    function ganttMouseover(div,d){
+        div
+            .transition()
+            .duration(200)
+            .style('opacity', 0.9);
+        div
+            .html(d.taskName + '<br/>- ' + d.taskDescription)
+            .style('left', d3.event.pageX + 'px')
+            .style('top', d3.event.pageY + 'px');
+            //.html("<div></div>")
+            //.style('background-image', `linear-gradient(to left, ${color1}, ${color2}, ${color3}, ${color4})`)
+            //.style("height", 60 + 'px')
+            //.style("width", 400 + 'px')
+            //.style("background-color", 'blue')
+            //.style('opacity', 0.9);
+    }
+
+    function ganttMouseout(div,d){
+        div
+            .transition()
+            .duration(500)
+            .style('opacity', 0);
+    }
+
+
     function gantt(tasks) {
 
         var color1 = "blue";
@@ -116,32 +163,15 @@ d3.gantt = function() {
             })
             .style('cursor', 'pointer')
             .on('click', d => {
-                CURRENT_TASKS = d.subTasks
-                changeTimeDomain(timeDomainString);
-                gantt.redraw(d.subTasks);
+                ganttClick(d)
             })
             .on('mouseover', d => {
-                div
-                    .transition()
-                    .duration(200)
-                    .style('opacity', 0.9);
-                div
-                    // .html('start date:' + d.startDate + '<br/>end date:' + d.endDate)
-                    // .style('left', d3.event.pageX + 'px')
-                    // .style('top', d3.event.pageY + 'px');
-                    .html("<div></div>")
-                    .style('background-image', `linear-gradient(to left, ${color1}, ${color2}, ${color3}, ${color4})`)
-                    .style("height", 60 + 'px')
-                    .style("width", 400 + 'px')
-                    // .style("background-color", 'blue')
-                    .style('opacity', 0.9);
+                ganttMouseover(div,d)
+ 
             })
             .on('mouseout', () => {
-                div
-                    .transition()
-                    .duration(500)
-                    .style('opacity', 0);
-            });;
+                ganttMouseout(div)
+            });
 
         var gx = svg.append("g")
             .attr("class", "x axis")
@@ -176,7 +206,7 @@ d3.gantt = function() {
             });
 
         d3.select("svg").call(zoom);
-
+      
         return gantt;
 
     };
@@ -189,10 +219,17 @@ d3.gantt = function() {
         var svg = d3.select(".chart");
 
         var ganttChartGroup = svg.select(".gantt-chart");
+        
         var rect = ganttChartGroup.selectAll("rect").data(tasks, keyFunction);
 
+        var div = d3
+            .select(selector)
+            .append('div')
+            .attr('class', 'd3tooltip')
+            .style('opacity', 0);
+
         rect.enter()
-            .insert("rect", ":first-child")
+            .append("rect")
             .attr("class", function(d) {
                 if (taskStatus[d.status] == null) {
                     return "bar";
@@ -210,10 +247,16 @@ d3.gantt = function() {
             })
             .style('cursor', 'pointer')
             .on('click', d => {
-                CURRENT_TASKS = d.subTasks
-                changeTimeDomain(timeDomainString);
-                gantt.redraw(d.subTasks);
+                ganttClick(d)
+            })
+            .on('mouseover', d => {
+                ganttMouseover(div,d)
+ 
+            })
+            .on('mouseout', () => {
+                ganttMouseout(div)
             });
+
 
         rect.transition()
             .attr("transform", rectTransform)
@@ -302,3 +345,4 @@ d3.gantt = function() {
 
     return gantt;
 };
+

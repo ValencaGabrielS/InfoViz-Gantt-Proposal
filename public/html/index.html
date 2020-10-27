@@ -15,8 +15,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script> 
     
+    <script type="text/javascript" src="utils.js"></script>
     <script type="text/javascript" src="ganttChart.js"></script>
     <script type="text/javascript" src="ganttHelper.js"></script>
+
     
 
     
@@ -44,7 +46,7 @@
     <div class="columns is-vcentered">
 
 
-        <div class="column is-5 is-offset-1">
+        <div class="column is-offset-1">
             <span class="tag is-primary is-light horizontalLabel">Sprints</span>
             <div class="box gantt">  
                 <a id="r" style="width:50px; position: absolute; z-index: 100" onclick="resetGantt()"><img src='/return.svg' alt="Go back"></a>
@@ -56,7 +58,7 @@
             </div>
         </div>
 
-        <div class="column is-3 is-offset-1">
+        <div class="column">
             <span class="tag is-primary is-light horizontalLabel">Task</span>
             <div class="box form">
                 <form id="ganttForm">

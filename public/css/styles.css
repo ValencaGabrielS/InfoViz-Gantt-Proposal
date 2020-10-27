@@ -3,6 +3,10 @@ div.box.gantt{
     height: fit-content;
 }
 
+div.box.form{
+    max-width: fit-content;
+}
+
 span.tag.overlay{
     z-index: 2;
     position: absolute;

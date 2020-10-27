@@ -1,33 +1,12 @@
 
 var taskGroups = [ "Team 1", "Team 2", "Team 3", "Team 4", "Team 5" ];
+var subtaskGroups = [ "Subtask 1", "Subtask 2", "Subtask 3", "Subtask 4", "Subtask 5" ];
 
 var MAIN_TASKS = [
-    {
-    "taskGroup":taskGroups[0],
-    "startDate": new Date(),
-    "endDate":addMinutes(new Date(),120),
-    "id":1,
-    "status":"bar-running",
-    "subTasks":[
-        {
-        "taskGroup":taskGroups[1],
-        "startDate": new Date(),
-        "endDate":addMinutes(new Date(),240),
-        "id":1,
-        "status":"bar-running",
-        "subTasks":[]
-        },
-        {
-            "taskGroup":taskGroups[2],
-            "startDate": new Date(),
-            "endDate":addMinutes(new Date(),60),
-            "id":1,
-            "status":"bar-running",
-            "subTasks":[]
-        }
-    ]
-    }
 ]
+
+var IS_SUBTASK_VIZ = false
+var SUBTASK_FOCUS = -1
 var CURRENT_TASKS = MAIN_TASKS;
 
 var currentId = CURRENT_TASKS.length;
@@ -40,27 +19,25 @@ var taskStatus = {
 };
 
 
-CURRENT_TASKS.sort(function(a, b) {
-    return a.endDate - b.endDate;
-});
+var date = new Date();
 
-var maxDate = CURRENT_TASKS[CURRENT_TASKS.length - 1].endDate;
-CURRENT_TASKS.sort(function(a, b) {
-    return a.startDate - b.startDate;
-});
+var maxDate = (CURRENT_TASKS[CURRENT_TASKS.length - 1] === undefined) ? date : CURRENT_TASKS[CURRENT_TASKS.length - 1].endDate;
 
-var minDate = CURRENT_TASKS[0].startDate;
+var minDate = (CURRENT_TASKS[0] === undefined)?date.setDate(date.getDate() - 1) : CURRENT_TASKS[0].startDate;
+
+CURRENT_TASKS.sort(function(a, b) {
+        return a.startDate - b.startDate;
+});
 
 var format = "%H:%M";
-var timeDomainString = "1day";
+var timeDomainString = "1week";
 
-var gantt = d3.gantt().taskTypes(taskGroups).taskStatus(taskStatus).tickFormat(format).height(450).width(800);
-
-
-gantt.timeDomainMode("fixed");
+var gantt = d3.gantt().taskTypes(taskGroups).taskStatus(taskStatus).tickFormat(format);
 changeTimeDomain(timeDomainString);
+gantt.timeDomainMode("fixed");
 
-gantt(CURRENT_TASKS);
+
+//gantt(CURRENT_TASKS);
 
 function changeTimeDomain(timeDomainString) {
     this.timeDomainString = timeDomainString;
@@ -107,28 +84,66 @@ function getEndDate() {
 }
 
 function addTask(data) {
-
+    
     var taskName = data.taskName
     var taskDescription = data.taskDescription
     var startDate = new Date(data.taskStart);
     var endDate = new Date(data.taskFinish);
     var taskTime = data.taskEstimative
     var taskGroup = data.taskGroup
+
+    if(!IS_SUBTASK_VIZ){
+        
+        console.log("adding maintask")
+
+        MAIN_TASKS.push({
+            "isSubtask":false,
+            "taskName" : taskName,
+            "id":currentId++,
+            "startDate" : startDate,
+            "endDate" : endDate,
+            "taskGroup" : taskGroup,
+            "status" : taskStatus.RUNNING,
+            "taskDescription": taskDescription,
+            "subTasks":[
+                {
+                "isSubtask":false,
+                "taskName" : "Task example",
+                "id":currentId++,
+                "startDate" : startDate,
+                "endDate" : endDate,
+                "taskGroup" : taskGroup,
+                "status" : taskStatus.RUNNING,
+                "taskDescription": "Task example description",
+                "subTasks":[]
+                }
+            ]
+        });
+
+        changeTimeDomain(timeDomainString)
+        gantt.redraw(MAIN_TASKS);
+    }
+    else{
+
+        console.log("adding subtask to sprint" +SUBTASK_FOCUS )        
+        CURRENT_TASKS = filterById(MAIN_TASKS)
+        
+        CURRENT_TASKS.subTasks.push({
+            "isSubtask":false,
+            "taskName" : taskName,
+            "id":currentId++,
+            "startDate" : startDate,
+            "endDate" : endDate,
+            "taskGroup" : taskGroup,
+            "status" : taskStatus.RUNNING,
+            "taskDescription": taskDescription,
+            "subTasks":[]
+        })
+
+        changeTimeDomain(timeDomainString)
+        gantt.redraw(CURRENT_TASKS);
+    }
     
-    var lastEndDate = getEndDate();
-
-    CURRENT_TASKS.push({
-        "taskName" : taskName,
-        "id":currentId++,
-        "startDate" : startDate,//d3.timeHour.offset(lastEndDate, Math.ceil(1 * Math.random())),
-        "endDate" : endDate,//d3.timeHour.offset(lastEndDate, (Math.ceil(Math.random() * 3)) + 5),
-        "taskGroup" : taskGroup,
-        "status" : taskStatus.RUNNING,
-        "subTasks":[]
-    });
-
-    changeTimeDomain(timeDomainString)
-    gantt.redraw(CURRENT_TASKS);
 };
 
 function removeTask() {
@@ -137,11 +152,13 @@ function removeTask() {
     gantt.redraw(CURRENT_TASKS);
 };
 
-function addMinutes(date, minutes) {
-    return date.setMinutes( date.getMinutes() + minutes );
-}
 
 function resetGantt(){
+    cleanRects()
     CURRENT_TASKS = MAIN_TASKS
     gantt.redraw(CURRENT_TASKS);
+}
+
+function cleanRects(){
+    d3.select(".chart").select(".gantt-chart").selectAll("rect").remove()
 }
