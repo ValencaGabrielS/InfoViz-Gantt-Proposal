@@ -35,6 +35,9 @@ d3.gantt = function() {
         return d.startDate + d.taskGroup + d.endDate;
     };
 
+    var imagTransform = function(d) {
+        return "translate(" + (x(d.startDate) +5) + "," + (y(d.taskGroup) +5)  + ")";
+    };
     var rectTransform = function(d) {
         return "translate(" + x(d.startDate) + "," + y(d.taskGroup) + ")";
     };
@@ -231,9 +234,10 @@ d3.gantt = function() {
 
         var svg = d3.select(".chart");
 
-        var ganttChartGroup = svg.select(".gantt-chart");
+        d3.select(".chart").selectAll("image").remove()
         
         var rect = svg.selectAll("rect").data(tasks, keyFunction);
+        var imag = svg.selectAll("images").data(tasks, keyFunction);
 
         rect.enter()
             .append("rect")
@@ -268,6 +272,17 @@ d3.gantt = function() {
             .style('cursor', 'pointer')
             ;
 
+        imag.enter()
+            .append('svg:image')
+            .attr("transform", imagTransform)
+            .attr("height", 30)
+            .attr("width", 30)
+            .attr('xlink:href', function(d) {
+                if(d.taskType === undefined)
+                    return null
+                else
+                    return d.taskType + '.png'
+            });
 
         rect.transition()
             .attr("transform", rectTransform)
@@ -278,7 +293,11 @@ d3.gantt = function() {
                 return Math.max(1, (x(d.endDate) - x(d.startDate)));
             });
 
+        imag.transition()
+            .attr("transform", imagTransform);
+
         rect.exit().remove();
+        imag.exit().remove();
 
         svg.select(".x").transition().call(xAxis);
         svg.select(".y").transition().call(yAxis);

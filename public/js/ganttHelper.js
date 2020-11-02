@@ -91,12 +91,14 @@ function getEndDate() {
 
 function addTask(data) {
     
+    console.log(data)
     var taskName = data.taskName
     var taskDescription = data.taskDescription
     var startDate = new Date(data.taskStart);
     var endDate = new Date(data.taskFinish);
     var taskTime = data.taskEstimative
     var taskGroup = data.taskGroup
+    var taskType = data.taskType
     currentId++
 
     if(!IS_SUBTASK_VIZ){
@@ -131,6 +133,7 @@ function addTask(data) {
             "taskGroup" : taskGroup,
             "status" : taskStatus.RUNNING,
             "taskDescription": taskDescription,
+            "taskType": taskType,
             "subTasks":[]
         })
 
@@ -158,25 +161,7 @@ function resetGantt(){
 
 function cleanRects(){
     d3.select(".chart").select(".gantt-chart").selectAll("rect").remove()
+    d3.select(".chart").selectAll("image").remove()
 }
 
-function changeVision(){
-    cleanRects()
-    $('#taskGroup').empty()
-    if(IS_SUBTASK_VIZ){
-        gantt = subgantt
-        subtaskGroups.forEach(d => 
-            $('#taskGroup').append(`<option value="${d}"> 
-                ${d} 
-            </option>`));
-            
-    }
-    else{
-        gantt = maingantt
-        taskGroups.forEach(d => 
-            $('#taskGroup').append(`<option value="${d}"> 
-                ${d} 
-            </option>`));
-            ; 
-    }
-}
+

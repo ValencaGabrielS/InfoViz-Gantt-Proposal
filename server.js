@@ -20,7 +20,7 @@ app.use(express.static(__dirname + '/public/html'));
 app.use(express.static(__dirname + '/public/js'));
 app.use(express.static(__dirname + '/public/css'));
 app.use(express.static(__dirname + '/public/images'));
-
+app.use(express.static(__dirname + '/public/images/icons'));
 app.use('/', router);
 
 app.listen(port, () => console.log(`running on localhost:${port}!`))
