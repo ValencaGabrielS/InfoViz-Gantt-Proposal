@@ -6,6 +6,7 @@
 const GANTT_HEIGHT = window.innerHeight/2
 const GANTT_WIDTH = window.innerWidth/2
 var tooltip;
+var burndown;
 
 d3.gantt = function() {
     var FIT_TIME_DOMAIN_MODE = "fit";
@@ -103,33 +104,53 @@ d3.gantt = function() {
         
         tooltip
             .style("opacity", 1)
-        /*d3.select(this)
+        
+        if(!d.isSubtask){
+            //setGradient(d.burndown)
+            setGradient(dummyArr)
+            burndown
+                .style("opacity", 1)
+        }
+        
+        d3.select(event.currentTarget)
             .style("stroke", "black")
             .style("opacity", 1)
-        */
+        
     }
 
     var ganttMousemove = function(d) {
+    
     
         tooltip
             .html(
                 "Task: " + d.taskName + "<br/>" + 
                 "Type: " + d.taskGroup + "<br/>" + 
-                "Starts: " + d.startDate + "<br/>" + 
-                "Ends: " + d.endDate + "<br/>" + 
+                "Starts: " + d.startDate.toISOString().split("T")[0] + "<br/>" + 
+                "Ends: " + d.endDate.toISOString().split("T")[0]  + "<br/>" + 
                 "Details: " + d.taskDescription
-            )/*
-            .style("left", (d3.mouse(this)[0]+70) + "px")
-            .style("top", (d3.mouse(this)[1]) + "px")*/
+            )
+            .style("left", event.clientX + "px")
+            .style("top", (event.clientY + (d.isSubtask? 30 : 45)  + "px"))
+
+        if(!d.isSubtask){
+            burndown
+                .style("left", event.clientX + "px")
+                .style("top", (event.clientY + 30 ) + "px")
+        }
     }
 
     var ganttMouseout = function(d) {
        
         tooltip
             .style("opacity", 0)
-        /*d3.select(this)
+        
+        burndown
+            .style("opacity", 0)
+
+        d3.select(event.currentTarget)
             .style("stroke", "none")
-            .style("opacity", 0.8)*/
+            .style("stroke-width", 4)
+            .style("opacity", 0.8)
     }
 
     function gantt(tasks) {
@@ -146,12 +167,23 @@ d3.gantt = function() {
             .append("div")
             .style("opacity", 0)
             .attr("class", "tooltip")
+            .attr("id", "tooltip")
             .style("background-color", "white")
             .style("border", "solid")
             .style("border-width", "2px")
             .style("border-radius", "5px")
             .style("padding", "5px")
-    
+        
+        burndown = d3.select(selector)
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "burndown")
+            .attr("id", "burndown")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
 
         var svg = d3.select(selector)
             .append("svg")

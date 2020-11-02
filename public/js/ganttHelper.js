@@ -160,6 +160,12 @@ function resetGantt(){
 }
 
 function cleanRects(){
+    tooltip
+            .style("opacity", 0)
+        
+    burndown
+        .style("opacity", 0)
+        
     d3.select(".chart").select(".gantt-chart").selectAll("rect").remove()
     d3.select(".chart").selectAll("image").remove()
 }

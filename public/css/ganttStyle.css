@@ -15,6 +15,18 @@ html,body,#wrapper {
 	shape-rendering: crispEdges;
 }
  
+.tooltip {
+	position: absolute;
+	z-index:3;
+}
+
+.burndown {
+	position: absolute;
+	z-index:3;
+	width: 140px;
+	height: 20px;
+}
+
 .bar {
 	fill: #33b5e5;
 }
@@ -37,4 +49,6 @@ html,body,#wrapper {
 
 rect {
 	height: 60px;
+	rx:8;
+    ry:8;
 }

@@ -29,8 +29,6 @@ span.tag.overlay{
     font-size: 11px;
 }
   
-  
-  
 #tag:before {
     border: solid transparent;
     content: ' ';

@@ -38,3 +38,37 @@ function filterById(jsonObject, id) {
 function addMinutes(date, minutes) {
     return date.setMinutes( date.getMinutes() + minutes );
 }
+
+dummyArr = [1,1,1,2,3,1,1]
+
+function setGradient(dayArr){
+
+    var colors = "linear-gradient(90deg,"
+    
+    const ok = "#34eb96"
+    const late = "#eb5634"
+    const early = "#34bdeb"
+
+    for(var i = 0 ; i < dayArr.length ; i++ ){
+        switch(dayArr[i]){
+            case(1 || "ok"):
+                colors += ok 
+                break
+            case(2 || "late"):
+                colors += late
+                break
+            case(3 || "early"):
+                colors += early
+                break
+            default:
+        }
+        if ( i < dayArr.length - 1)
+            colors += ","
+    }
+
+    colors += ")"
+    
+    //document.getElementById("burndown").style.backgroundImage = colors;
+    $("#burndown").css("background-image", colors);
+    return colors
+}
