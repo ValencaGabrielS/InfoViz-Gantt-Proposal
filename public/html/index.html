@@ -18,15 +18,13 @@
     <script type="text/javascript" src="utils.js"></script>
     <script type="text/javascript" src="ganttChart.js"></script>
     <script type="text/javascript" src="ganttHelper.js"></script>
-
-    
-
-    
-
+    <script type="text/javascript" src="githubApi.js"></script>
 
 </head>
 
 <body>
+    
+
     <nav class="navbar is-warning" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="https://gptool.com">
@@ -41,10 +39,21 @@
     <!-- Main container -->    
     <br>
 
+    <div class="columns is-vcentered">
+        <div class="column is-offset-1">
+            <label for="url">Entre com o repositório GitHub user/repo URL:</label>
+            <input type="url" name="giturl" id="giturl"
+                placeholder=" tensorflow/tensorflow" size="60"
+                required> <br>
+            <button id = 'btnIssues'>Issues</button>
+            <button id = 'btnCommits'>Commits</button>
+            <div id = 'divResult'>
+
+            </div>
+        </div>
+    </div>
 
     <div class="columns is-vcentered">
-
-
         <div class="column is-offset-1">
             <span class="tag is-primary is-light horizontalLabel">Sprints</span>
             <div class="box gantt">  
