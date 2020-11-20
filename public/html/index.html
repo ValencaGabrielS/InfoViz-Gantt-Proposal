@@ -19,7 +19,6 @@
     <script type="text/javascript" src="ganttChart.js"></script>
     <script type="text/javascript" src="ganttHelper.js"></script>
     
-
 </head>
 
 <body>
@@ -39,7 +38,7 @@
 
     <div class="columns is-vcentered">
         <div class="column is-offset-1">
-            <label for="url">Entre com o repositório GitHub user/repo URL:</label>
+            <label for="url">GitHub user/repo URL:</label>
             <input type="url" name="giturl" id="giturl"
                 placeholder=" tensorflow/tensorflow" size="60"
                 required> <br>
@@ -72,14 +71,14 @@
 
                     <div class="field is-grouped">
                         <div class="field" style="margin-right: 12px">
-                            <label class="label">Nome</label>
+                            <label class="label">Name</label>
                             <div class="control">
-                                <input id="taskName" name="taskName" class="input " type="text" placeholder="XXX - Adicionar nome">
+                                <input id="taskName" name="taskName" class="input " type="text" placeholder="001 - Name">
                             </div>
                         </div>
     
                         <div class="field px-6">
-                            <label class="label">Time</label>
+                            <label class="label">Team</label>
                             <div class="control">
                                 <div class="select">
                                 <select name="taskGroup" id="taskGroup">
@@ -97,14 +96,14 @@
                     <div class="field is-grouped">
                         <div class="field is-horizontal">
                             <div class="field" style="margin-right: 12px">
-                                <label class="label">Data de Inicio</label>
+                                <label class="label">Start Date</label>
                                 <div class="control">
                                     <input type="date" id="taskStart" name="taskStart">
                                 </div>
                             </div>                           
 
                             <div class="field ">
-                                <label class="label">Data de Fim</label>
+                                <label class="label">End Date</label>
                                 <div class="control">
                                     <input type="date" id="taskFinish" name="taskFinish">
                                 </div>
@@ -114,7 +113,7 @@
 
                     <div class="field is-grouped is-grouped-left">
                         <div class="field" style="margin-right: 12px">
-                            <label class="label">Tipo</label>
+                            <label class="label">Type</label>
                             <div class="control">
                                 <div class="select">
                                 <select id="taskType" name="taskType">
@@ -127,7 +126,7 @@
                         </div> 
 
                         <div class="field">
-                            <label class="label">Estimativa</label>
+                            <label class="label">Estimative</label>
                             <div class="control">
                                 <input class="input"  id="taskEstimative" name="taskEstimative"  type="number" placeholder="30"  style="width:4em;" >
                             </div>
@@ -135,7 +134,7 @@
                     </div>                        
 
                     <div class="field">
-                        <label class="label">Descrição</label>
+                        <label class="label">Description</label>
                         <div class="field-body">
                             <div class="field">
                             <div class="control">
@@ -148,7 +147,7 @@
 
                     <div class="field is-grouped">
                         <div class="control">
-                            <button class="button is-success">Add task</button>
+                            <button class="button is-success">Add Task</button>
                         </div>
                         <div class="control">
                             <button class="button is-link is-danger">Remove Task</button>
@@ -308,7 +307,7 @@
             })
 
         }
-
+        
     </script>
 </body>
 
