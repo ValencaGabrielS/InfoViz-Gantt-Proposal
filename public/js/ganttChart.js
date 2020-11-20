@@ -90,6 +90,8 @@ d3.gantt = function() {
             
             changeVision()
 
+            document.getElementById("ganttForm").reset();
+
             changeTimeDomain("1week")          
             gantt.redraw(CURRENT_TASKS);
         }
