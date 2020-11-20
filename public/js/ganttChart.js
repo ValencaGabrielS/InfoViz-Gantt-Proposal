@@ -91,6 +91,7 @@ d3.gantt = function() {
             changeVision()
 
             document.getElementById("ganttForm").reset();
+            document.getElementById("r").style.visibility = "visible";
 
             changeTimeDomain("1week")          
             gantt.redraw(CURRENT_TASKS);
@@ -157,10 +158,7 @@ d3.gantt = function() {
 
     function gantt(tasks) {
 
-        var color1 = "blue";
-        var color2 = "yellow";
-        var color3 = "green";
-        var color4 = "red";
+        document.getElementById("r").style.visibility = "hidden";
 
         initTimeDomain(tasks);
         initAxis();

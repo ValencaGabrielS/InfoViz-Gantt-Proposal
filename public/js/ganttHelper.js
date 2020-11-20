@@ -151,6 +151,8 @@ function removeTask() {
 
 function resetGantt(){
 
+    document.getElementById("r").style.visibility = "hidden";
+
     IS_SUBTASK_VIZ = false
     CURRENT_TASKS = MAIN_TASKS
     SUBTASK_FOCUS = -1
