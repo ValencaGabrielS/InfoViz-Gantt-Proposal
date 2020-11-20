@@ -221,42 +221,15 @@ d3.gantt = function() {
             .on('mousemove', ganttMousemove)
             .on('mouseout', ganttMouseout);
 
-        var gx = svg.append("g")
-            .attr("class", "x axis")
+        svg.append("g")
+            .attr("class", "xaxis")
             .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
             .transition()
             .call(xAxis);
 
         svg.append("g").attr("class", "y axis").transition().call(yAxis);
 
-        var zoom = d3.zoom()
-            .scaleExtent([1, Infinity])
-            .translateExtent([
-                [0, 0],
-                [width, 0]
-            ])
-            .extent([
-                [0, 0],
-                [width, height]
-            ])
-            .on("zoom", function() {
-                const transform = d3.event.transform;
-                gx.call(xAxis.scale(transform.rescaleX(x)));
-
-                bar.attr("width", function(d) {
-                        var left = transform.applyX(x(d.startDate));
-                        var right = transform.applyX(x(d.endDate));
-                        return Math.max(1, right - Math.max(0, left));
-                    })
-                    .attr("transform", function(d) {
-                        return "translate(" + Math.max(0, transform.applyX(x(d.startDate))) + "," + y(d.taskGroup) + ")";
-                    });
-            });
-
-        d3.select("svg").call(zoom);
-      
         return gantt;
-
     };
 
     gantt.redraw = function(tasks) {
@@ -270,6 +243,7 @@ d3.gantt = function() {
         
         var rect = svg.selectAll("rect").data(tasks, keyFunction);
         var imag = svg.selectAll("images").data(tasks, keyFunction);
+        var gx = svg.selectAll("g.xaxis");
 
         rect.enter()
             .append("rect")
@@ -333,6 +307,32 @@ d3.gantt = function() {
 
         svg.select(".x").transition().call(xAxis);
         svg.select(".y").transition().call(yAxis);
+
+        var zoom = d3.zoom()
+            .scaleExtent([1, Infinity])
+            .translateExtent([
+                [0, 0],
+                [width, 0]
+            ])
+            .extent([
+                [0, 0],
+                [width, height]
+            ])
+            .on("zoom", function() {
+                const transform = d3.event.transform;
+                gx.call(xAxis.scale(transform.rescaleX(x)));
+                
+                rect.attr("width", function(d) {
+                        var left = transform.applyX(x(d.startDate));
+                        var right = transform.applyX(x(d.endDate));
+                        return Math.max(1, right - Math.max(0, left));
+                    })
+                    .attr("transform", function(d) {
+                        return "translate(" + Math.max(0, transform.applyX(x(d.startDate))) + "," + y(d.taskGroup) + ")";
+                    });
+            });
+
+            svg.call(zoom);
 
         return gantt;
     };
