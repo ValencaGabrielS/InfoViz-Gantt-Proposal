@@ -70,6 +70,10 @@ function changeTimeDomain(timeDomainString) {
             format = "%a %H:%M";
             gantt.timeDomain([ d3.timeDay.offset(getEndDate(), -7), getEndDate() ]);
             break;
+        case "1year":
+            format = "%d/%m";
+            gantt.timeDomain([ d3.timeDay.offset(getEndDate(), -365), getEndDate() ]);
+            break;
         default:
             format = "%H:%M"
     }

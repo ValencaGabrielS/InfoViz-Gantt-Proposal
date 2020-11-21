@@ -207,7 +207,11 @@
         async function getIssues() {
             clear();
             var url = "https://api.github.com/search/issues?q=repo:"
-            url = url.concat(document.getElementById("giturl").value, " type:issue state:closed");
+            
+            // var repo = document.getElementById("giturl").value;
+            var repo = "junit-team/junit5";
+
+            url = url.concat(repo, " type:issue state:closed");
             const response = await fetch(url)
             const result = await response.json()
             var count = 0;
@@ -215,43 +219,148 @@
             console.log(result)
 
             var num = 0;
-            result.items.forEach(i => {
+
+            var resultFiltered = result.items.filter(item => item.milestone);
+            var users = resultFiltered.map(item => item.user.login);
+
+            var subTasks = [];
+
+            console.log(resultFiltered);
+            console.log(users);
+
+            var id = 1;
+            var count = 1;
+
+            var Startdates = resultFiltered.map(r => r.created_at);
+            var EndDates = resultFiltered.map(r => r.closed_at);
+
+            var minDate = Startdates.reduce(function (a, b) { return a < b ? a : b; }); 
+            var maxDate = EndDates.reduce(function (a, b) { return a > b ? a : b; });
+
+            taskGroups = []
+            resultFiltered.forEach(item => {
+
+                var taskGroup = "Team " + count;
+                var mainTask =
+                    {
+                        "isSubtask": false,
+                        "taskName": item.milestone.title,
+                        "id": id++,
+                        "startDate": new Date(),
+                        "endDate": new Date(),
+                        "taskGroup": taskGroup,
+                        "status": taskStatus.SUCCEEDED,
+                        "taskDescription": item.milestone.description,
+                        "taskType": "Backend",
+                        "subTasks": []
+                    };
+
                 count++;
-                const anchor = document.createElement("a")
-                anchor.href = i.html_url;
-                // anchor.textContent = i.title.concat(" ", count);
-                // divResult.appendChild(anchor)
-                // var info = "    ";
-                // info = info.concat("Descrição: ", i.body, "| Data estimada: ", i.due_on);
-                // info = info.concat("|    Cirado em: ", i.created_at, "|   fechado em:", i.closed_at)
-                // divResult.appendChild(document.createTextNode(info))
-                // divResult.appendChild(document.createElement("br"))
+                taskGroups.push(taskGroup)
 
-                if(num == 5)
-                    num = 0
+                var currentId = 0;
+                subtaskGroups = []
 
-                var taskName = i.body
-                var taskDescription = "teste"
-                var startDate = new Date(i.created_at);
-                var endDate = new Date(i.closed_at);
-                var taskTime = i.due_on
-                var taskGroup = "Team " + num++
-                var taskType = "BUG"
+                resultFiltered.forEach(i => {
+                    
+                    const anchor = document.createElement("a")
+                    anchor.href = i.html_url;
+                    // anchor.textContent = i.title.concat(" ", count);
+                    // divResult.appendChild(anchor)
+                    // var info = "    ";
+                    // info = info.concat("Descrição: ", i.body, "| Data estimada: ", i.due_on);
+                    // info = info.concat("|    Cirado em: ", i.created_at, "|   fechado em:", i.closed_at)
+                    // divResult.appendChild(document.createTextNode(info))
+                    // divResult.appendChild(document.createElement("br"))
 
-                CURRENT_TASKS.push({
-                    "isSubtask":true,
-                    "taskName" : taskName,
-                    "id": currentId++,
-                    "startDate" : startDate,
-                    "endDate" : endDate,
-                    "taskGroup" : taskGroup,
-                    "status" : taskStatus.RUNNING,
-                    "taskDescription": taskDescription,
-                    "taskType": taskType,
-                    "subTasks":[]
+                    if(num == 5)
+                        num = 0
+
+                    var taskName = i.title;
+                    var taskDescription = i.body;
+                    var startDate = new Date(i.created_at);
+                    var endDate = new Date(i.closed_at);
+                    var taskTime = i.due_on;
+                    var taskGroup = i.user.login
+
+                    subtaskGroups.push(taskGroup);
+
+                    var labels = i.labels
+                    // console.log(labels)
+                    var taskType;
+                    
+                    labels.forEach(element => {
+                        labelName = element.name.toLowerCase();
+
+                        if(labelName.includes("add")) {
+                            taskType = "Add";
+                        }
+                        else if(labelName.includes("bug")) {
+                            taskType = "Bug";
+                        }
+                        else if(labelName.includes("change")) {
+                            taskType = "Change";
+                        }
+                        else if(labelName.includes("file")) {
+                            taskType = "File";
+                        }
+                        else if(labelName.includes("fix")) {
+                            taskType = "Fix";
+                        }
+                        else if(labelName.includes("new")) {
+                            taskType = "New";
+                        }
+                        else if(labelName.includes("patch")) {
+                            taskType = "Patch";
+                        }
+                        else if(labelName.includes("support")) {
+                            taskType = "Support";
+                        }
+                        else if(labelName.includes("test")) {
+                            taskType = "Test";
+                        } 
+                        else {
+                            taskType = undefined;
+                        }
+                    });
+
+                    mainTask.subTasks.push({
+                        "isSubtask": true,
+                        "taskName" : taskName,
+                        "id": currentId++,
+                        "startDate" : startDate,
+                        "endDate" : endDate,
+                        "taskGroup" : taskGroup,
+                        "status" : taskStatus.RUNNING,
+                        "taskDescription": taskDescription,
+                        "taskType": taskType,
+                        "subTasks":[]
+                    })
                 })
 
+                var StartdatesSubTasks = mainTask.subTasks.map(s => s.startDate);
+                var EndDatesSubTasks = mainTask.subTasks.map(s => s.endDate);
+
+                var minDateSubTasks = StartdatesSubTasks.reduce(function (a, b) { return a < b ? a : b; });
+                var maxDateSubTasks = EndDatesSubTasks.reduce(function (a, b) { return a > b ? a : b; });
+
+                mainTask.startDate = new Date(minDateSubTasks);
+                mainTask.endDate = new Date(maxDateSubTasks);
+
+                console.log(mainTask)
+                MAIN_TASKS.push(mainTask);
             })
+
+            changeTimeDomain("1year");
+            maingantt = d3.gantt().taskTypes(taskGroups).taskStatus(taskStatus).tickFormat(format);
+            subgantt = d3.gantt().taskTypes(subtaskGroups).taskStatus(taskStatus).tickFormat(format);
+
+            maingantt.timeDomainMode("fit");
+            subgantt.timeDomainMode("fit");
+
+            gantt = maingantt
+
+            CURRENT_TASKS = [MAIN_TASKS[0]]
 
             console.log(CURRENT_TASKS)
             gantt.redraw(CURRENT_TASKS);
@@ -282,6 +391,8 @@
 
             })
             const result = await response.json()
+
+            console.log(result);
 
             result.items.forEach(i => {
                 const img = document.createElement("img")
