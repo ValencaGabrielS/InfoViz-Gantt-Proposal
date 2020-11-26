@@ -252,6 +252,7 @@
             }
 
             taskGroups = []
+            subtaskGroups = new Array();
             milestonesFiltered.forEach(item => {
 
                 var taskGroup = "Team " + count;
@@ -259,7 +260,7 @@
                     {
                         "isSubtask": false,
                         "taskName": item.title,
-                        "id": id++,
+                        "id": id,
                         "startDate": new Date(),
                         "endDate": new Date(),
                         "taskGroup": taskGroup,
@@ -273,33 +274,24 @@
                 taskGroups.push(taskGroup)
 
                 var currentId = 0;
-                subtaskGroups = []
+                
+                subtaskGroups[id] = new Array();
 
                 resultFiltered.forEach(i => {
                     
                     if(item.id === i.milestone.id)
                     {
-                        const anchor = document.createElement("a")
-                        anchor.href = i.html_url;
-                        // anchor.textContent = i.title.concat(" ", count);
-                        // divResult.appendChild(anchor)
-                        // var info = "    ";
-                        // info = info.concat("Descrição: ", i.body, "| Data estimada: ", i.due_on);
-                        // info = info.concat("|    Cirado em: ", i.created_at, "|   fechado em:", i.closed_at)
-                        // divResult.appendChild(document.createTextNode(info))
-                        // divResult.appendChild(document.createElement("br"))
-
                         var taskName = i.title;
                         var taskDescription = i.body;
                         var startDate = new Date(i.created_at);
-                        var endDate = new Date(i.closed_at);
-                        var taskTime = i.due_on;
-                        var taskGroup = i.user.login
+                        var endDate = addDays(new Date(i.created_at), 5);
+                        var subTaskGroup = i.user.login
 
-                        subtaskGroups.push(taskGroup);
+                        subtaskGroups[id].push(subTaskGroup);
+
+                        console.log(subtaskGroups[id])
 
                         var labels = i.labels
-                        // console.log(labels)
                         
                         var taskType;
                         labels.forEach(element => {
@@ -343,7 +335,7 @@
                             "id": currentId++,
                             "startDate" : startDate,
                             "endDate" : endDate,
-                            "taskGroup" : taskGroup,
+                            "taskGroup" : subTaskGroup,
                             "status" : taskStatus.RUNNING,
                             "taskDescription": taskDescription,
                             "taskType": taskType,
@@ -351,6 +343,8 @@
                         })
                     }
                 })
+
+                id++;
 
                 var StartdatesSubTasks = mainTask.subTasks.map(s => s.startDate);
                 var EndDatesSubTasks = mainTask.subTasks.map(s => s.endDate);
@@ -366,7 +360,7 @@
 
             changeTimeDomain("1year");
             maingantt = d3.gantt().taskTypes(taskGroups).taskStatus(taskStatus).tickFormat(format);
-            subgantt = d3.gantt().taskTypes(subtaskGroups).taskStatus(taskStatus).tickFormat(format);
+            subgantt = d3.gantt().taskTypes(subtaskGroups[0]).taskStatus(taskStatus).tickFormat(format);
 
             maingantt.timeDomainMode("fit");
             subgantt.timeDomainMode("fit");

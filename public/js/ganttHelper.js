@@ -89,7 +89,6 @@ function changeTimeDomain(timeDomainString) {
             format = "%H:%M"
     }
 
-    console.log(gantt.taskTypes())
     gantt.tickFormat(format);
     gantt.redraw(CURRENT_TASKS);
 }
@@ -191,3 +190,8 @@ function cleanRects(){
 }
 
 
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }

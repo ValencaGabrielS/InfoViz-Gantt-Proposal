@@ -1,7 +1,7 @@
 MAIN_OPTIONS = ["Backend", "Frontend", "API", "Design"]
 SUB_OPTIONS = ["Add", "Bug", "Change", "File", "Fix", "New", "Patch", "Support","Test"]
 
-function changeVision(){
+function changeVision(idMainTask){
     cleanRects()
     $('#taskGroup').empty()
     $('#taskType').empty()
@@ -9,7 +9,7 @@ function changeVision(){
     if(IS_SUBTASK_VIZ){
         $('#chartLabel').text("SUBTASKS")
         gantt = subgantt
-        subtaskGroups.forEach(d => 
+        subtaskGroups[idMainTask].forEach(d => 
             $('#taskGroup').append(`<option value="${d}"> 
                 ${d} 
             </option>`));

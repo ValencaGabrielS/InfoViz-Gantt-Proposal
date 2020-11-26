@@ -91,14 +91,16 @@ d3.gantt = function() {
             IS_SUBTASK_VIZ = true
             SUBTASK_FOCUS = d.id
             CURRENT_TASKS = filterById(MAIN_TASKS,SUBTASK_FOCUS).subTasks
+
+            subgantt = d3.gantt().taskTypes(subtaskGroups[d.id]).taskStatus(taskStatus).tickFormat(format);
             gantt = subgantt
             
-            changeVision()
+            changeVision(d.id)
 
             document.getElementById("ganttForm").reset();
             document.getElementById("r").style.visibility = "visible";
 
-            changeTimeDomain("lastTask")          
+            changeTimeDomain("1year")          
             gantt.redraw(CURRENT_TASKS);
         }
         else{
