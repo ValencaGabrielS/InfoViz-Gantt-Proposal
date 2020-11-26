@@ -66,9 +66,14 @@ function changeTimeDomain(timeDomainString) {
             gantt.timeDomain([ d3.timeDay.offset(getTomorrowDate(), -1), getTomorrowDate() ]);
             break;
 
-        case "1week":
+        case "lastTask":
+            format = "%d %H:%M";
+            gantt.timeDomain([ d3.timeDay.offset(getEndDate(), -7), getEndDate() ]);
+            break;
+
+        case "thisWeek":
             format = "%d - %H:%M";
-            gantt.timeDomain([ d3.timeDay.offset(getWeekendDate(), -7), getWeekendDate() ]);
+            gantt.timeDomain([ d3.timeDay.offset(getWeekendDate(), -8), getWeekendDate() -1]);
             break;
 
         case "1month":
@@ -110,6 +115,8 @@ function addTask(data) {
     var taskGroup = data.taskGroup
     var taskType = data.taskType
     currentId++
+
+    timeDomainString = "lastTask"
 
     if(!IS_SUBTASK_VIZ){
         

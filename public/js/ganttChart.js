@@ -37,8 +37,13 @@ d3.gantt = function() {
     };
 
     var imagTransform = function(d) {
-        return "translate(" + (x(d.startDate) + (x(d.endDate) - x(d.startDate)) -33) + "," + (y(d.taskGroup) +5)  + ")";
+        return "translate(" + (x(d.startDate) + (x(d.endDate) - x(d.startDate)) -32) + "," + (y(d.taskGroup) +2)  + ")";
     };
+
+    var textTransform = function(d) {
+        return "translate(" + x(d.startDate) + "," + (y(d.taskGroup) + 40) + ")";
+    };
+
     var rectTransform = function(d) {
         return "translate(" + x(d.startDate) + "," + y(d.taskGroup) + ")";
     };
@@ -93,7 +98,7 @@ d3.gantt = function() {
             document.getElementById("ganttForm").reset();
             document.getElementById("r").style.visibility = "visible";
 
-            changeTimeDomain("1week")          
+            changeTimeDomain("lastTask")          
             gantt.redraw(CURRENT_TASKS);
         }
         else{
@@ -107,6 +112,7 @@ d3.gantt = function() {
         
         tooltip
             .style("opacity", 1)
+            .style("display", "block")
         
         if(!d.isSubtask){
             //setGradient(d.burndown)
@@ -133,12 +139,12 @@ d3.gantt = function() {
                 "Details: " + d.taskDescription
             )
             .style("left", event.clientX + "px")
-            .style("top", (event.clientY + (d.isSubtask? 30 : 45)  + "px"))
+            .style("top", (event.clientY + (d.isSubtask? 45 : 60)  + "px"))
 
         if(!d.isSubtask){
             burndown
                 .style("left", event.clientX + "px")
-                .style("top", (event.clientY + 30 ) + "px")
+                .style("top", (event.clientY + 45 ) + "px")
         }
     }
 
@@ -146,6 +152,7 @@ d3.gantt = function() {
        
         tooltip
             .style("opacity", 0)
+            .style("display", "none")
         
         burndown
             .style("opacity", 0)
@@ -221,8 +228,8 @@ d3.gantt = function() {
             .on('mousemove', ganttMousemove)
             .on('mouseout', ganttMouseout);
 
-        svg.append("g")
-            .attr("class", "xaxis")
+        var gx = svg.append("g")
+            .attr("class", "x axis")
             .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
             .transition()
             .call(xAxis);
@@ -242,7 +249,9 @@ d3.gantt = function() {
         d3.select(".chart").selectAll("image").remove()
         
         var rect = svg.selectAll("rect").data(tasks, keyFunction);
-        var imag = svg.selectAll("images").data(tasks, keyFunction);
+        var imag = svg.selectAll("images").data(tasks, keyFunction);        
+        var text = svg.selectAll("text").data(tasks, keyFunction);
+
         var gx = svg.selectAll("g.xaxis");
 
         rect.enter()
@@ -277,7 +286,13 @@ d3.gantt = function() {
             })
             .style('cursor', 'pointer')
             ;
-
+         
+        text.enter() 
+            .append("text")   
+            .attr("transform", textTransform)
+            .attr("dy", ".35em")
+            .text(function(d) { return d.taskName; });
+        
         imag.enter()
             .append('svg:image')
             .attr("transform", imagTransform)
@@ -302,8 +317,12 @@ d3.gantt = function() {
         imag.transition()
             .attr("transform", imagTransform);
 
+        text.transition()
+            .attr("transform", textTransform);
+
         rect.exit().remove();
-        imag.exit().remove();
+        imag.exit().remove();        
+        //text.exit().remove();
 
         svg.select(".x").transition().call(xAxis);
         svg.select(".y").transition().call(yAxis);

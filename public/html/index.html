@@ -57,8 +57,9 @@
                 <a id="r" style="width:50px; position: absolute; z-index: 100" onclick="resetGantt()"><img src='/return.svg' alt="Go back"></a>
                 <div class="field is-grouped is-grouped-right">                    
                     <button class="button is-small" onclick="changeTimeDomain('1day')">DAY</button>
-                    <button class="button is-small" onclick="changeTimeDomain('1week')">WEEK</button>                    
+                    <button class="button is-small" onclick="changeTimeDomain('thisWeek')">WEEK</button>                    
                     <button class="button is-small" onclick="changeTimeDomain('1month')">MONTH</button>
+                    <button class="button is-small" onclick="changeTimeDomain('lastTask')">LAST</button>
                 </div>
                 <div id="ganttChart"></div>
             </div>
