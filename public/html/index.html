@@ -218,10 +218,6 @@
             const result = await response.json()
             var count = 0;
 
-            console.log(result)
-
-            var num = 0;
-
             var resultFiltered = result.items.filter(item => item.milestone);
             var users = resultFiltered.map(item => item.user.login);
 
@@ -244,8 +240,6 @@
 
             var milestones = resultFiltered.map(r => r.milestone);
 
-            console.log(milestones)
-
             var milestonesFiltered = [];
             var listAux = []
             for(var j = 0; j < milestones.length; j++)
@@ -256,9 +250,6 @@
                     listAux.push(milestones[j].id);
                 }
             }
-
-            console.log("milestonesFiltered");
-            console.log(milestonesFiltered);
 
             taskGroups = []
             milestonesFiltered.forEach(item => {
@@ -298,9 +289,6 @@
                         // divResult.appendChild(document.createTextNode(info))
                         // divResult.appendChild(document.createElement("br"))
 
-                        if(num == 5)
-                            num = 0
-
                         var taskName = i.title;
                         var taskDescription = i.body;
                         var startDate = new Date(i.created_at);
@@ -312,8 +300,8 @@
 
                         var labels = i.labels
                         // console.log(labels)
-                        var taskType;
                         
+                        var taskType;
                         labels.forEach(element => {
                             labelName = element.name.toLowerCase();
 
