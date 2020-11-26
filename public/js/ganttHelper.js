@@ -63,13 +63,19 @@ function changeTimeDomain(timeDomainString) {
 
         case "1day":
             format = "%H:%M";
-            gantt.timeDomain([ d3.timeDay.offset(getEndDate(), -1), getEndDate() ]);
+            gantt.timeDomain([ d3.timeDay.offset(getTomorrowDate(), -1), getTomorrowDate() ]);
             break;
 
         case "1week":
-            format = "%a %H:%M";
-            gantt.timeDomain([ d3.timeDay.offset(getEndDate(), -7), getEndDate() ]);
+            format = "%d - %H:%M";
+            gantt.timeDomain([ d3.timeDay.offset(getWeekendDate(), -7), getWeekendDate() ]);
             break;
+
+        case "1month":
+            format = "%d/%m";
+            gantt.timeDomain([ d3.timeDay.offset(getEndMonthDate(), -31), getEndMonthDate() ]);
+            break;
+
         case "1year":
             format = "%d/%m";
             gantt.timeDomain([ d3.timeDay.offset(getEndDate(), -365), getEndDate() ]);

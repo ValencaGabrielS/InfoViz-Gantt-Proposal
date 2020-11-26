@@ -37,7 +37,7 @@ d3.gantt = function() {
     };
 
     var imagTransform = function(d) {
-        return "translate(" + (x(d.startDate) +5) + "," + (y(d.taskGroup) +5)  + ")";
+        return "translate(" + (x(d.startDate) + (x(d.endDate) - x(d.startDate)) -33) + "," + (y(d.taskGroup) +5)  + ")";
     };
     var rectTransform = function(d) {
         return "translate(" + x(d.startDate) + "," + y(d.taskGroup) + ")";

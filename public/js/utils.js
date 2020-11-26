@@ -7,6 +7,7 @@ function changeVision(){
     $('#taskType').empty()
 
     if(IS_SUBTASK_VIZ){
+        $('#chartLabel').text("SUBTASKS")
         gantt = subgantt
         subtaskGroups.forEach(d => 
             $('#taskGroup').append(`<option value="${d}"> 
@@ -19,6 +20,7 @@ function changeVision(){
             
     }
     else{
+        $('#chartLabel').text("SPRINTS")
         gantt = maingantt
         taskGroups.forEach(d => 
             $('#taskGroup').append(`<option value="${d}"> 
@@ -33,10 +35,6 @@ function changeVision(){
 
 function filterById(jsonObject, id) {
     return jsonObject.filter(function(jsonObject) {return (jsonObject['id'] == id);})[0];
-}
-
-function addMinutes(date, minutes) {
-    return date.setMinutes( date.getMinutes() + minutes );
 }
 
 dummyArr = [1,1,1,2,3,1,1]
@@ -71,4 +69,29 @@ function setGradient(dayArr){
     //document.getElementById("burndown").style.backgroundImage = colors;
     $("#burndown").css("background-image", colors);
     return colors
+}
+
+function addMinutes(date, minutes) {
+    return date.setMinutes( date.getMinutes() + minutes );
+}
+
+function getEndMonthDate(){
+    var today = new Date();
+    var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+    return lastDayOfMonth;
+}
+
+function getWeekendDate(){
+    
+    dt = new Date(); 
+    var lastday = dt.getDate() - (dt.getDay() - 1) + 6;
+    
+    return new Date(dt.setDate(lastday));
+}
+
+function getTomorrowDate(){
+    var tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate()+1);
+    tomorrow.setHours(0,0,0,0);
+    return tomorrow;
 }
