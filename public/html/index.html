@@ -211,7 +211,7 @@
             // var repo = document.getElementById("giturl").value;
             var repo = "junit-team/junit5";
 
-            url = url.concat(repo, " type:issue state:closed");
+            url = url.concat(repo, " type:issue ");
             const response = await fetch(url)
             const result = await response.json()
             var count = 0;
@@ -237,21 +237,42 @@
             var minDate = Startdates.reduce(function (a, b) { return a < b ? a : b; }); 
             var maxDate = EndDates.reduce(function (a, b) { return a > b ? a : b; });
 
+            var IdsMilestones = resultFiltered.map(r => r.milestone.id);
+            var IdsMilestonesFiltered = IdsMilestones.filter(function(elem, index, array) { return array.indexOf(elem) === index });
+
+            var milestones = resultFiltered.map(r => r.milestone);
+
+            console.log(milestones)
+
+            var milestonesFiltered = [];
+            var listAux = []
+            for(var j = 0; j < milestones.length; j++)
+            {
+                if(IdsMilestonesFiltered.indexOf(milestones[j].id) >= 0 && milestonesFiltered && listAux.indexOf(milestones[j].id) < 0)
+                {
+                    milestonesFiltered.push(milestones[j]);
+                    listAux.push(milestones[j].id);
+                }
+            }
+
+            console.log("milestonesFiltered");
+            console.log(milestonesFiltered);
+
             taskGroups = []
-            resultFiltered.forEach(item => {
+            milestonesFiltered.forEach(item => {
 
                 var taskGroup = "Team " + count;
                 var mainTask =
                     {
                         "isSubtask": false,
-                        "taskName": item.milestone.title,
+                        "taskName": item.title,
                         "id": id++,
                         "startDate": new Date(),
                         "endDate": new Date(),
                         "taskGroup": taskGroup,
-                        "status": taskStatus.SUCCEEDED,
-                        "taskDescription": item.milestone.description,
-                        "taskType": "Backend",
+                        "status": item.state == "open" ? taskStatus.RUNNING : taskStatus.SUCCEEDED,
+                        "taskDescription": item.description,
+                        "taskType": undefined,
                         "subTasks": []
                     };
 
@@ -263,79 +284,82 @@
 
                 resultFiltered.forEach(i => {
                     
-                    const anchor = document.createElement("a")
-                    anchor.href = i.html_url;
-                    // anchor.textContent = i.title.concat(" ", count);
-                    // divResult.appendChild(anchor)
-                    // var info = "    ";
-                    // info = info.concat("Descrição: ", i.body, "| Data estimada: ", i.due_on);
-                    // info = info.concat("|    Cirado em: ", i.created_at, "|   fechado em:", i.closed_at)
-                    // divResult.appendChild(document.createTextNode(info))
-                    // divResult.appendChild(document.createElement("br"))
+                    if(item.id === i.milestone.id)
+                    {
+                        const anchor = document.createElement("a")
+                        anchor.href = i.html_url;
+                        // anchor.textContent = i.title.concat(" ", count);
+                        // divResult.appendChild(anchor)
+                        // var info = "    ";
+                        // info = info.concat("Descrição: ", i.body, "| Data estimada: ", i.due_on);
+                        // info = info.concat("|    Cirado em: ", i.created_at, "|   fechado em:", i.closed_at)
+                        // divResult.appendChild(document.createTextNode(info))
+                        // divResult.appendChild(document.createElement("br"))
 
-                    if(num == 5)
-                        num = 0
+                        if(num == 5)
+                            num = 0
 
-                    var taskName = i.title;
-                    var taskDescription = i.body;
-                    var startDate = new Date(i.created_at);
-                    var endDate = new Date(i.closed_at);
-                    var taskTime = i.due_on;
-                    var taskGroup = i.user.login
+                        var taskName = i.title;
+                        var taskDescription = i.body;
+                        var startDate = new Date(i.created_at);
+                        var endDate = new Date(i.closed_at);
+                        var taskTime = i.due_on;
+                        var taskGroup = i.user.login
 
-                    subtaskGroups.push(taskGroup);
+                        subtaskGroups.push(taskGroup);
 
-                    var labels = i.labels
-                    // console.log(labels)
-                    var taskType;
-                    
-                    labels.forEach(element => {
-                        labelName = element.name.toLowerCase();
+                        var labels = i.labels
+                        // console.log(labels)
+                        var taskType;
+                        
+                        labels.forEach(element => {
+                            labelName = element.name.toLowerCase();
 
-                        if(labelName.includes("add")) {
-                            taskType = "Add";
-                        }
-                        else if(labelName.includes("bug")) {
-                            taskType = "Bug";
-                        }
-                        else if(labelName.includes("change")) {
-                            taskType = "Change";
-                        }
-                        else if(labelName.includes("file")) {
-                            taskType = "File";
-                        }
-                        else if(labelName.includes("fix")) {
-                            taskType = "Fix";
-                        }
-                        else if(labelName.includes("new")) {
-                            taskType = "New";
-                        }
-                        else if(labelName.includes("patch")) {
-                            taskType = "Patch";
-                        }
-                        else if(labelName.includes("support")) {
-                            taskType = "Support";
-                        }
-                        else if(labelName.includes("test")) {
-                            taskType = "Test";
-                        } 
-                        else {
-                            taskType = undefined;
-                        }
-                    });
+                            if(labelName.includes("add")) {
+                                taskType = "Add";
+                            }
+                            else if(labelName.includes("bug")) {
+                                taskType = "Bug";
+                            }
+                            else if(labelName.includes("change")) {
+                                taskType = "Change";
+                            }
+                            else if(labelName.includes("file")) {
+                                taskType = "File";
+                            }
+                            else if(labelName.includes("fix")) {
+                                taskType = "Fix";
+                            }
+                            else if(labelName.includes("new")) {
+                                taskType = "New";
+                            }
+                            else if(labelName.includes("patch")) {
+                                taskType = "Patch";
+                            }
+                            else if(labelName.includes("support")) {
+                                taskType = "Support";
+                            }
+                            else if(labelName.includes("test")) {
+                                taskType = "Test";
+                            } 
+                            else {
+                                taskType = undefined;
+                            }
+                        });
 
-                    mainTask.subTasks.push({
-                        "isSubtask": true,
-                        "taskName" : taskName,
-                        "id": currentId++,
-                        "startDate" : startDate,
-                        "endDate" : endDate,
-                        "taskGroup" : taskGroup,
-                        "status" : taskStatus.RUNNING,
-                        "taskDescription": taskDescription,
-                        "taskType": taskType,
-                        "subTasks":[]
-                    })
+                        mainTask.subTasks.push({
+                            "isSubtask": true,
+                            "taskName" : taskName,
+                            "id": currentId++,
+                            "startDate" : startDate,
+                            "endDate" : endDate,
+                            "taskGroup" : taskGroup,
+                            "status" : taskStatus.RUNNING,
+                            "taskDescription": taskDescription,
+                            "taskType": taskType,
+                            "subTasks":[]
+                        })
+                    }
                 })
 
                 var StartdatesSubTasks = mainTask.subTasks.map(s => s.startDate);
@@ -347,7 +371,6 @@
                 mainTask.startDate = new Date(minDateSubTasks);
                 mainTask.endDate = new Date(maxDateSubTasks);
 
-                console.log(mainTask)
                 MAIN_TASKS.push(mainTask);
             })
 
@@ -358,11 +381,11 @@
             maingantt.timeDomainMode("fit");
             subgantt.timeDomainMode("fit");
 
-            gantt = maingantt
+            gantt = maingantt;
 
-            CURRENT_TASKS = [MAIN_TASKS[0]]
+            CURRENT_TASKS = MAIN_TASKS;
 
-            console.log(CURRENT_TASKS)
+            console.log(CURRENT_TASKS);
             gantt.redraw(CURRENT_TASKS);
         }
 
