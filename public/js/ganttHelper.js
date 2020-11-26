@@ -187,6 +187,7 @@ function cleanRects(){
         
     d3.select(".chart").select(".gantt-chart").selectAll("rect").remove()
     d3.select(".chart").selectAll("image").remove()
+    d3.select(".chart").selectAll(".barText").remove()
 }
 
 

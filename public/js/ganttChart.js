@@ -37,7 +37,7 @@ d3.gantt = function() {
     };
 
     var imagTransform = function(d) {
-        return "translate(" + (x(d.startDate) + (x(d.endDate) - x(d.startDate)) -32) + "," + (y(d.taskGroup) +2)  + ")";
+        return "translate(" + (x(d.startDate) + (x(d.endDate) - x(d.startDate)) -30) + "," + (y(d.taskGroup))  + ")";
     };
 
     var textTransform = function(d) {
@@ -246,11 +246,12 @@ d3.gantt = function() {
 
         var svg = d3.select(".chart");
 
-        d3.select(".chart").selectAll("image").remove()
-        
+        d3.select(".chart").selectAll("image").remove()      
+        d3.select(".chart").selectAll(".barText").remove()
+
         var rect = svg.selectAll("rect").data(tasks, keyFunction);
         var imag = svg.selectAll("images").data(tasks, keyFunction);        
-        var text = svg.selectAll("text").data(tasks, keyFunction);
+        var span = svg.selectAll("span").data(tasks, keyFunction);
 
         var gx = svg.selectAll("g.xaxis");
 
@@ -287,8 +288,9 @@ d3.gantt = function() {
             .style('cursor', 'pointer')
             ;
          
-        text.enter() 
+        span.enter()
             .append("text")   
+            .attr("class", "barText")
             .attr("transform", textTransform)
             .attr("dy", ".35em")
             .text(function(d) { return d.taskName; });
@@ -317,12 +319,12 @@ d3.gantt = function() {
         imag.transition()
             .attr("transform", imagTransform);
 
-        text.transition()
+        span.transition()
             .attr("transform", textTransform);
 
         rect.exit().remove();
         imag.exit().remove();        
-        //text.exit().remove();
+        span.exit().remove();
 
         svg.select(".x").transition().call(xAxis);
         svg.select(".y").transition().call(yAxis);
