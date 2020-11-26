@@ -253,7 +253,7 @@ d3.gantt = function() {
         var imag = svg.selectAll("images").data(tasks, keyFunction);        
         var span = svg.selectAll("span").data(tasks, keyFunction);
 
-        var gx = svg.selectAll("g.xaxis");
+        var gx = svg.selectAll("g.x");
 
         rect.enter()
             .append("rect")
