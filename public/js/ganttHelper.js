@@ -117,6 +117,8 @@ function addTask(data) {
 
     timeDomainString = "lastTask"
 
+    dummyArr = [1,1,1,2,3,1,1]
+
     if(!IS_SUBTASK_VIZ){
         
         console.log("adding maintask")
@@ -130,6 +132,7 @@ function addTask(data) {
             "taskGroup" : taskGroup,
             "status" : taskStatus.RUNNING,
             "taskDescription": taskDescription,
+            "burndownArray": dummyArr,
             "subTasks":[]
         });
 

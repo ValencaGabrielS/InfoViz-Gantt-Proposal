@@ -35,6 +35,7 @@ async function getIssues() {
                 "taskGroup": taskGroup,
                 "status": item.state == "open" ? taskStatus.RUNNING : taskStatus.SUCCEEDED,
                 "taskDescription": item.description,
+                "burndownArray": new Array(),
                 "taskType": undefined,
                 "subTasks": []
             };
@@ -45,7 +46,6 @@ async function getIssues() {
         var currentId = 0;
         
         subtaskGroups[id] = new Array();
-        dummyArr[id] = new Array();
         
         resultFiltered.forEach(i => {
             
@@ -59,8 +59,6 @@ async function getIssues() {
                 var subTaskGroup = i.user.login;
 
                 subtaskGroups[id].push(subTaskGroup);
-
-                console.log(subtaskGroups[id]);
 
                 var labels = i.labels;
                 
@@ -133,12 +131,9 @@ async function getIssues() {
                     burndownTask = burndownType.OK;
                 }
                 
-                
-                dummyArr[id].push(burndownTask);
+                mainTask.burndownArray.push(burndownTask);
             }
         })
-
-        console.log(dummyArr[id]);
 
         var StartdatesSubTasks = mainTask.subTasks.map(s => s.startDate);
         var EndDatesSubTasks = mainTask.subTasks.map(s => s.endDate);

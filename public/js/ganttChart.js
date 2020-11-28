@@ -118,7 +118,7 @@ d3.gantt = function() {
         
         if(!d.isSubtask){
             //setGradient(d.burndown)
-            setGradient(dummyArr[d.id])
+            setGradient(d.burndownArray)
             burndown
                 .style("opacity", 1)
         }

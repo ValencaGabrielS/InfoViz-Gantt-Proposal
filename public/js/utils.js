@@ -43,9 +43,6 @@ function filterById(jsonObject, id) {
     return jsonObject.filter(function(jsonObject) {return (jsonObject['id'] == id);})[0];
 }
 
-dummyArr = new Array();
-dummyArr[0] = [1,1,1,2,3,1,1]
-
 function setGradient(dayArr){
     
     var colors = "linear-gradient(90deg,"
