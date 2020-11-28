@@ -1,6 +1,12 @@
 MAIN_OPTIONS = ["Backend", "Frontend", "API", "Design"]
 SUB_OPTIONS = ["Add", "Bug", "Change", "File", "Fix", "New", "Patch", "Support","Test"]
 
+const burndownType = {
+    OK: 1,
+    LATE: 2,
+    EARLY: 3,
+} 
+
 function changeVision(idMainTask){
     cleanRects()
     $('#taskGroup').empty()
@@ -37,10 +43,11 @@ function filterById(jsonObject, id) {
     return jsonObject.filter(function(jsonObject) {return (jsonObject['id'] == id);})[0];
 }
 
-dummyArr = [1,1,1,2,3,1,1]
+dummyArr = new Array();
+dummyArr[0] = [1,1,1,2,3,1,1]
 
 function setGradient(dayArr){
-
+    
     var colors = "linear-gradient(90deg,"
     
     const ok = "#34eb96"
@@ -49,13 +56,13 @@ function setGradient(dayArr){
 
     for(var i = 0 ; i < dayArr.length ; i++ ){
         switch(dayArr[i]){
-            case(1 || "ok"):
+            case(burndownType.OK || "ok"):
                 colors += ok 
                 break
-            case(2 || "late"):
+            case(burndownType.LATE || "late"):
                 colors += late
                 break
-            case(3 || "early"):
+            case(burndownType.EARLY || "early"):
                 colors += early
                 break
             default:
