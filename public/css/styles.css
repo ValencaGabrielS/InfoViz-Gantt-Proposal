@@ -13,7 +13,7 @@ span.tag.overlay{
 }
 
 .horizontalLabel {
-    top: -5%;
+    top: 0%;
     position: relative;
     z-index: 1;
 }

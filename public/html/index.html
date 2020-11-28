@@ -36,23 +36,8 @@
     <!-- Main container -->    
     <br>
 
-    <div class="columns is-vcentered">
-        <div class="column is-offset-1">
-            
-            <label class="label" for="url">GitHub user/repo URL:</label>
-            <div class="field is-grouped">
-                <div class="field" style="margin-right: 12px">
-                    <div class="control">
-                        <input class="input" type="url" name="giturl" id="giturl" placeholder="junit-team/junit5" size="40">
-                    </div>
-                </div>
-                <button id="btnIssues" class="button is-success">Add Issues GitHub</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="columns is-vcentered">
-        <div class="column is-offset-1">
+    <div class="columns">
+        <div class="column is-offset-1 is-vcentered">
             <span class="tag is-primary is-light horizontalLabel" id="chartLabel">SPRINTS</span>
             <div class="box gantt">  
                 <a id="r" style="width:50px; position: absolute; z-index: 100" onclick="resetGantt()"><img src='/return.svg' alt="Go back"></a>
@@ -67,9 +52,11 @@
 
         </div>
 
-        <div class="column">
-            <span class="tag is-primary is-light horizontalLabel">Task</span>
-            <div class="box form">
+        <div class="column is-vcentered">
+            <span class="tag is-primary is-light horizontalLabel" style="cursor:pointer;" onclick="ShowTaskForm()">Task</span>
+            <span class="tag is-primary is-light horizontalLabel" style="cursor:pointer;" onclick="ShowGitHubForm()">GitHub</span>
+            
+            <div id="taskform" class="box form">
                 <form id="ganttForm">
 
                     <div class="field is-grouped">
@@ -159,6 +146,18 @@
 
                 </form>       
             </div>
+
+            <div id="githubform" class="box form" >
+                <label class="label" for="url">GitHub user/repo URL:</label>
+                <div class="field is-grouped">
+                    <div class="field" style="margin-right: 12px">
+                        <div class="control">
+                            <input class="input" type="url" name="giturl" id="giturl" placeholder="junit-team/junit5" size="40">
+                        </div>
+                    </div>
+                </div>
+                <button id="btnIssues" class="button is-success">Add Issues GitHub</button>
+            </div>
         </div>
     </div>
     
@@ -176,7 +175,8 @@
     </footer>
 
     <script>
-       
+        document.getElementById("githubform").style.display = "none";
+
         gantt(CURRENT_TASKS)  
 
         $('#ganttForm').submit(function(e) {
@@ -195,6 +195,18 @@
             //removeTask(e)
             addTask(values)
         });
+
+        function ShowTaskForm()
+        {
+           document.getElementById("taskform").style.display = "block";
+           document.getElementById("githubform").style.display = "none";
+        }
+
+        function ShowGitHubForm()
+        {
+           document.getElementById("taskform").style.display = "none";
+           document.getElementById("githubform").style.display = "block";
+        }
 
     </script>
 
