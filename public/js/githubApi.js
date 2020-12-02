@@ -65,38 +65,11 @@ async function getIssues() {
                 var taskType;
                 labels.forEach(element => {
                     labelName = element.name.toLowerCase();
-
-                    if(labelName.includes("add")) {
-                        taskType = "Add";
-                    }
-                    else if(labelName.includes("bug")) {
-                        taskType = "Bug";
-                    }
-                    else if(labelName.includes("change")) {
-                        taskType = "Change";
-                    }
-                    else if(labelName.includes("file")) {
-                        taskType = "File";
-                    }
-                    else if(labelName.includes("fix")) {
-                        taskType = "Fix";
-                    }
-                    else if(labelName.includes("new")) {
-                        taskType = "New";
-                    }
-                    else if(labelName.includes("patch")) {
-                        taskType = "Patch";
-                    }
-                    else if(labelName.includes("support")) {
-                        taskType = "Support";
-                    }
-                    else if(labelName.includes("test")) {
-                        taskType = "Test";
-                    } 
-                    else {
-                        taskType = undefined;
-                    }
+                    
+                    taskType = GetTaskType(labelName);
                 });
+
+                taskType = taskType === undefined ? GetTaskType(taskName.toLowerCase()) : taskType;
 
                 mainTask.subTasks.push({
                     "isSubtask": true,
@@ -235,4 +208,42 @@ function getMilestonesFiltered(resultFiltered)
         }
     }
     return milestonesFiltered
+}
+
+function GetTaskType(name) 
+{
+    var taskType;
+
+    if(name.includes("add")) {
+        taskType = "Add";
+    }
+    else if(name.includes("bug")) {
+        taskType = "Bug";
+    }
+    else if(name.includes("change") || name.includes("improvement")) {
+        taskType = "Change";
+    }
+    else if(name.includes("file")) {
+        taskType = "File";
+    }
+    else if(name.includes("fix")) {
+        taskType = "Fix";
+    }
+    else if(name.includes("new") || name.includes("make")) {
+        taskType = "New";
+    }
+    else if(name.includes("patch")) {
+        taskType = "Patch";
+    }
+    else if(name.includes("support")) {
+        taskType = "Support";
+    }
+    else if(name.includes("test")) {
+        taskType = "Test";
+    } 
+    else {
+        taskType = undefined;
+    }
+
+    return taskType;
 }

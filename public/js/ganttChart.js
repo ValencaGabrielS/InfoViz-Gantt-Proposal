@@ -135,7 +135,7 @@ d3.gantt = function() {
         tooltip
             .html(
                 "Task: " + d.taskName + "<br/>" + 
-                "Type: " + d.taskGroup + "<br/>" + 
+                "Type: " + d.taskType + "<br/>" + 
                 "Starts: " + d.startDate.toISOString().split("T")[0] + "<br/>" + 
                 "Ends: " + d.endDate.toISOString().split("T")[0]  + "<br/>" + 
                 "Details: " + d.taskDescription
