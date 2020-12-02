@@ -131,22 +131,32 @@ d3.gantt = function() {
 
     var ganttMousemove = function(d) {
     
-    
-        tooltip
-            .html(
-                "Task: " + d.taskName + "<br/>" + 
-                "Type: " + d.taskType + "<br/>" + 
-                "Starts: " + d.startDate.toISOString().split("T")[0] + "<br/>" + 
-                "Ends: " + d.endDate.toISOString().split("T")[0]  + "<br/>" + 
-                "Details: " + d.taskDescription
-            )
-            .style("left", event.clientX + "px")
-            .style("top", (event.clientY + (d.isSubtask? 45 : 60)  + "px"))
-
         if(!d.isSubtask){
+            tooltip
+                .html(
+                    "Task: " + d.taskName + "<br/>" + 
+                    "Starts: " + d.startDate.toISOString().split("T")[0] + "<br/>" + 
+                    "Ends: " + d.endDate.toISOString().split("T")[0]  + "<br/>" + 
+                    "Details: " + d.taskDescription
+                )
+                .style("left", event.clientX + "px")
+                .style("top", (event.clientY + (d.isSubtask? 45 : 60)  + "px"))
+
             burndown
                 .style("left", event.clientX + "px")
                 .style("top", (event.clientY + 45 ) + "px")
+        } else {
+            tooltip
+                .html(
+                    "Task: " + d.taskName + "<br/>" + 
+                    "Type: " + d.taskType + "<br/>" + 
+                    "Starts: " + d.startDate.toISOString().split("T")[0] + "<br/>" + 
+                    "Ends: " + d.endDate.toISOString().split("T")[0]  + "<br/>" + 
+                    "Details: " + d.taskDescription
+                )
+                .style("left", event.clientX + "px")
+                .style("top", (event.clientY + (d.isSubtask? 45 : 60)  + "px"))
+
         }
     }
 
