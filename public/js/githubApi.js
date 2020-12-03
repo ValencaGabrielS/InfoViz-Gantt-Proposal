@@ -6,8 +6,8 @@ async function getIssues() {
 
     var url = "https://api.github.com/search/issues?q=repo:"
     
-    // var repo = document.getElementById("giturl").value;
-    var repo = "junit-team/junit5";
+    var repo = document.getElementById("giturl").value;
+    // var repo = "junit-team/junit5";
 
     url = url.concat(repo, " type:issue ");
     const response = await fetch(url);
